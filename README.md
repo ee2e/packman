@@ -1,6 +1,6 @@
 # Pack-Man
 
-> 객체 인식(Object Recognition)를 이용하여 여행물품 Check하기
+> 객체 인식(Object Detection)를 이용하여 여행물품 Check하기
 
 ## 목차
 
