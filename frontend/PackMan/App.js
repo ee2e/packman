@@ -1,14 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
+import { Text } from 'react-native-elements';
+
+import { useFonts } from '@use-expo/font';
+
+import { AppLoading } from 'expo';
+
+const bmhannaFonts = {
+  'BMHANNA': require('./assets/fonts/BMHANNAPro.ttf'),
+};
 
 export default function App() {
+  const [isLoaded] = useFonts(bmhannaFonts);
+
+  if (!isLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Image source={require('./assets/logo.gif')} style={styles.logo} />
+      <Text h3 style={styles.text}>PACKMAN</Text>
       <StatusBar style="auto" />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -18,4 +34,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  logo: {
+    width: 200,
+    resizeMode: 'contain'
+  },
+  text: {
+    fontWeight: 'bold',
+    color: '#08b5dd',
+    fontFamily: 'BMHANNA'
+  }
 });
