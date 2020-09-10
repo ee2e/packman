@@ -1,46 +1,60 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { Text } from 'react-native-elements';
+import { StatusBar } from "expo-status-bar";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Image } from "react-native";
 
-import { useFonts } from '@use-expo/font';
+import { Text } from "react-native-elements";
+import { useFonts } from "@use-expo/font";
+import { AppLoading } from "expo";
 
-import { AppLoading } from 'expo';
+import SignIn from "./screens/Auth/SignIn";
 
 const bmhannaFonts = {
-  'BMHANNA': require('./assets/fonts/BMHANNAPro.ttf'),
+  BMHANNA: require("./assets/fonts/BMHANNAPro.ttf"),
 };
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
   const [isLoaded] = useFonts(bmhannaFonts);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsReady(true);
+    }, 2000);
+  }, []);
 
   if (!isLoaded) {
     return <AppLoading />;
   }
 
-  return (
+  return isReady ? (
     <View style={styles.container}>
-      <Image source={require('./assets/logo.gif')} style={styles.logo} />
-      <Text h3 style={styles.text}>PACKMAN</Text>
+      <SignIn />
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <Image source={require("./assets/logo.gif")} style={styles.logo} />
+      <Text h3 style={styles.text}>
+        PACK-MAN
+      </Text>
       <StatusBar style="auto" />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   logo: {
     width: 200,
-    resizeMode: 'contain'
+    resizeMode: "contain",
   },
   text: {
-    fontWeight: 'bold',
-    color: '#08b5dd',
-    fontFamily: 'BMHANNA'
-  }
+    fontWeight: "bold",
+    color: "#14c6e4",
+    fontFamily: "BMHANNA",
+  },
 });
