@@ -7,6 +7,7 @@ import { useFonts } from "@use-expo/font";
 import { AppLoading } from "expo";
 
 import SignIn from "./screens/Auth/SignIn";
+import SignUp from "./screens/Auth/SignUp";
 
 const bmhannaFonts = {
   BMHANNA: require("./assets/fonts/BMHANNAPro.ttf"),
@@ -28,7 +29,7 @@ export default function App() {
 
   return isReady ? (
     <View style={styles.container}>
-      <SignIn />
+      <SignUp />
     </View>
   ) : (
     <View style={styles.container}>
