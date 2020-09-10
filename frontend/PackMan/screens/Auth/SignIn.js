@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, View, Image } from "react-native";
-import { Text } from "react-native-elements";
+import { Text, Button } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
@@ -17,21 +17,6 @@ export default function SingIn() {
         placeholder="email@address.com"
         leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
       />
-      {/* <Input
-        placeholder="INPUT WITH CUSTOM ICON"
-        leftIcon={<Icon name="user" size={24} color="black" />}
-      />
-      <Input
-        placeholder="Comment"
-        leftIcon={{ type: "font-awesome", name: "comment" }}
-        style={styles}
-        onChangeText={(value) => this.setState({ comment: value })}
-      />
-      <Input
-        placeholder="INPUT WITH ERROR MESSAGE"
-        errorStyle={{ color: "red" }}
-        errorMessage="ENTER A VALID ERROR HERE"
-      /> */}
       <Input
         containerStyle={styles.inputContainer}
         label="비밀번호"
@@ -39,12 +24,15 @@ export default function SingIn() {
         secureTextEntry={true}
         leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
       />
+      <Button
+        title="로그인"
+        buttonStyle={styles.button}
+        containerStyle={styles.buttonContainer}
+        titleStyle={styles.title}
+      />
+      <Image source={require("../../assets/kakao_login.png")} />
       <Text style={styles.text}>아이디 / 비밀번호 찾기</Text>
       <Text style={styles.text}>회원가입</Text>
-      <Image
-        source={require("../../assets/kakao_login.png")}
-        style={styles.kakaoLogin}
-      />
     </View>
   );
 }
@@ -63,13 +51,22 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "BMHANNA",
-    fontSize: 20,
+    fontSize: 18,
     marginTop: 20,
   },
   inputContainer: {
     width: 270,
   },
-  kakaoLogin: {
-    marginTop: 25,
+  button: {
+    backgroundColor: "#03bcdb",
+    borderWidth: 2,
+    borderColor: "#03bcdb",
+    borderRadius: 6,
   },
+  buttonContainer: {
+    marginTop: 10,
+    height: 60,
+    width: 183,
+  },
+  title: { fontWeight: "bold" },
 });
