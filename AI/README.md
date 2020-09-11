@@ -15,7 +15,19 @@
 
 ## Process
 
+> 학습 명령어
 
+```python
+python flow --model ./cfg/yolo-new.cfg --labels ./labels.txt --trainer adam --dataset ./data/datasets/airpot/ --annotation ./data/annotations/airpot/ --train --summary ./logs --batch 1 --epoch 100 --save 50 --keep 5 --lr 1e-04 --gpu 0.4
+```
+
+
+
+> 실행 명령어
+
+```python
+python flow --model ./cfg/yolo.cfg --load ./bin/yolov2.weights --batch 5 --gpu 0.4 --imgdir ./data/datasets/
+```
 
 
 
@@ -47,5 +59,16 @@ ResourceExhaustedError
 
 
 
+```python
+
+```
+
+> self.offset = 16 + (found - expect)
 
 
+
+```python
+None type error(shape)
+```
+
+>  .xml 내 .jpg 이름 확인
