@@ -76,3 +76,5 @@ None type error(shape)
 
 
 > darkflow는 이미지를 .xml로 요구함
+
+ 
