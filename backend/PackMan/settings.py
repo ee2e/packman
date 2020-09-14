@@ -40,6 +40,10 @@ INSTALLED_APPS = [
 
     # DRF
     'rest_framework',
+
+    # Mt Apps
+    'accounts',
+    'articles',
 ]
 
 MIDDLEWARE = [
