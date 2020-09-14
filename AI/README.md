@@ -72,3 +72,7 @@ None type error(shape)
 ```
 
 >  .xml 내 .jpg 이름 확인
+
+
+
+> darkflow는 이미지를 .xml로 요구함
