@@ -18,7 +18,8 @@
 > 학습 명령어
 
 ```python
-python flow --model ./cfg/yolo-new.cfg --labels ./labels.txt --trainer adam --dataset ./data/datasets/airpot/ --annotation ./data/annotations/airpot/ --train --summary ./logs --batch 1 --epoch 100 --save 50 --keep 5 --lr 1e-04 --gpu 0.4
+python flow --model ./cfg/my-tiny-yolo.cfg --labels ./labels.txt --trainer adam --dataset ./data/datasets/ --annotation ./data/annotations/ --train --summary ./logs --batch 5 --epoch 100 --save 50 --keep 5 --lr 1e-04 --gpu 0.5
+
 ```
 
 
@@ -26,7 +27,7 @@ python flow --model ./cfg/yolo-new.cfg --labels ./labels.txt --trainer adam --da
 > 실행 명령어
 
 ```python
-python flow --model ./cfg/yolo.cfg --load ./bin/yolov2.weights --batch 5 --gpu 0.4 --imgdir ./data/datasets/
+python flow --model ./cfg/my-tiny-yolo.cfg --load -1 --batch 5 --gpu 0.5 --imgdir ./my_img/
 ```
 
 
@@ -60,7 +61,7 @@ ResourceExhaustedError
 
 
 ```python
-
+AssertionError: expect 64701556 bytes, found 180357512
 ```
 
 > self.offset = 16 + (found - expect)
@@ -68,10 +69,34 @@ ResourceExhaustedError
 
 
 ```python
-None type error(shape)
+AttributeError: 'NoneType' object has no attribute 'shape'
 ```
 
->  .xml 내 .jpg 이름 확인
+>  .xml 내 .jpg 이름 확인 및 이미지 경로 확인
+
+
+
+```python
+AssertionError: Over-read ./bin/yolov2-tiny.weights
+```
+
+>.weights 와 .cfg 매칭이 안되기 때문
+
+
+
+```python
+ModuleNotFoundError: No module named 'libs.resources'
+```
+
+>pyrcc5 -o libs/resources.py resources.qrc
+
+
+
+```
+sre_constants.error: bad character range s-1 at position 12
+```
+
+> .xml파일이 이름에 '-' 포함했기 때문
 
 
 
