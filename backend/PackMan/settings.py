@@ -40,6 +40,10 @@ INSTALLED_APPS = [
 
     # DRF
     'rest_framework',
+    'rest_framework.authtoken',
+
+    # rest_auth
+    'rest_auth',
 
     # Mt Apps
     'accounts',
@@ -128,3 +132,11 @@ STATIC_URL = '/static/'
 
 
 AUTH_USER_MODEL = 'accounts.User'
+
+
+# DRF auth settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
