@@ -96,7 +96,7 @@ ModuleNotFoundError: No module named 'libs.resources'
 sre_constants.error: bad character range s-1 at position 12
 ```
 
-> .xml파일이 이름에 '-' 포함했기 때문
+> .xml파일이 이름에 '-' 포함했기 때문에
 
 
 
