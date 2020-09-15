@@ -12,8 +12,8 @@ def check_list(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def check_detail(request, article_pk):
-    check = get_object_or_404(Check_list, pk=check_list_pk)
+def check_detail(request, check_pk):
+    check = get_object_or_404(Check_list, pk=check_pk)
     serializer = CheckSerializer(check)
     return Response(serializer.data)
 
