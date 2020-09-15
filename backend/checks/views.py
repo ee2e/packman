@@ -19,4 +19,7 @@ def check_detail(request, check_pk):
 
 @api_view(['POST'])
 def create_check(request):
-    pass
+    serializer = CheckSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response(serializer.data)
