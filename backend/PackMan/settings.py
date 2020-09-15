@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
     # Mt Apps
     'accounts',
-    'articles',
+    'checks',
 ]
 
 MIDDLEWARE = [
