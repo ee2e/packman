@@ -37,17 +37,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', # regisetration
 
     # DRF
     'rest_framework',
     'rest_framework.authtoken',
 
-    # rest_auth
+    # rest_auth + allauth
     'rest_auth',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
 
     # Mt Apps
     'accounts',
     'checks',
+
 ]
 
 MIDDLEWARE = [
@@ -133,6 +138,8 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'accounts.User'
 
+#django sites app setting
+SITE_ID = 1
 
 # DRF auth settings
 REST_FRAMEWORK = {
