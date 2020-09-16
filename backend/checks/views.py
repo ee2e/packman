@@ -21,5 +21,5 @@ def check_detail(request, check_pk):
 def create_check(request):
     serializer = CheckSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(user_id=1)
+        serializer.save(user=request.user)  # NOT NULL CONSTRAINT FAILD
         return Response(serializer.data)
