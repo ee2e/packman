@@ -6,8 +6,7 @@ import { Text } from "react-native-elements";
 import { useFonts } from "@use-expo/font";
 import { AppLoading } from "expo";
 
-import SignIn from "./screens/Auth/SignIn";
-import SignUp from "./screens/Auth/SignUp";
+import Gate from "./components/Gate";
 
 const bmhannaFonts = {
   BMHANNA: require("./assets/fonts/BMHANNAPro.ttf"),
@@ -29,7 +28,7 @@ export default function App() {
 
   return isReady ? (
     <View style={styles.container}>
-      <SignUp />
+      <Gate />
     </View>
   ) : (
     <View style={styles.container}>
