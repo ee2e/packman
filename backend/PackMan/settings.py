@@ -25,7 +25,7 @@ SECRET_KEY = '9ze^z*4*mo+m#kmoh7x#58dx(^j!ji779a)!&c9c6_^cq@xheu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 
 # Application definition
@@ -37,13 +37,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', # regisetration
 
     # DRF
     'rest_framework',
+    'rest_framework.authtoken',
+
+    # rest_auth + allauth
+    'rest_auth',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
 
     # Mt Apps
     'accounts',
     'checks',
+
 ]
 
 MIDDLEWARE = [
@@ -128,3 +137,13 @@ STATIC_URL = '/static/'
 
 
 AUTH_USER_MODEL = 'accounts.User'
+
+#django sites app setting
+SITE_ID = 1
+
+# DRF auth settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
