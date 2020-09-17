@@ -8,6 +8,8 @@ import { Input } from "react-native-elements";
 
 export default function SingIn({ navigation }) {
   const goToSignUp = () => navigation.navigate("SignUp");
+  const goToFind = () => navigation.navigate("Find");
+
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/logo.gif")} style={styles.logo} />
@@ -32,7 +34,9 @@ export default function SingIn({ navigation }) {
         titleStyle={styles.title}
       />
       <Image source={require("../../assets/kakao_login.png")} />
-      <Text style={styles.text}>아이디 / 비밀번호 찾기</Text>
+      <TouchableOpacity onPress={goToFind}>
+        <Text style={styles.text}>이메일 / 비밀번호 찾기</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={goToSignUp}>
         <Text style={styles.text}>회원가입</Text>
       </TouchableOpacity>

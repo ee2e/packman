@@ -34,8 +34,14 @@ export default function SingIn({ navigation }) {
       <Input
         containerStyle={styles.inputContainer}
         label="이름"
-        placeholder="User Name"
+        placeholder="홍길동"
         leftIcon={<MaterialIcons name="person" size={24} color="#03bcdb" />}
+      />
+      <Input
+        containerStyle={styles.inputContainer}
+        label="폰 번호"
+        placeholder="0101234567"
+        leftIcon={<MaterialIcons name="smartphone" size={24} color="#03bcdb" />}
       />
       <View style={styles.buttonsContainer}>
         <Button
@@ -49,7 +55,7 @@ export default function SingIn({ navigation }) {
           buttonStyle={styles.backButton}
           containerStyle={styles.backButtonContainer}
           titleStyle={styles.backTitle}
-          onPress={() => navigation.pop()}
+          onPress={() => navigation.goBack()}
         />
       </View>
       <StatusBar barStyle="light-content" />
@@ -66,6 +72,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 150,
+    // 36.5%
     height: 88,
     marginBottom: 20,
   },
