@@ -27,9 +27,7 @@ export default function App() {
   }
 
   return isReady ? (
-    <View style={styles.container}>
-      <Gate />
-    </View>
+    <Gate />
   ) : (
     <View style={styles.container}>
       <Image source={require("./assets/logo.gif")} style={styles.logo} />

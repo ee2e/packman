@@ -1,13 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, View, Image } from "react-native";
-import { Text, Button } from "react-native-elements";
+import { Button } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
 
-export default function SingIn() {
+export default function SingIn({ navigation }) {
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/logo.gif")} style={styles.logo} />
@@ -50,6 +49,7 @@ export default function SingIn() {
           buttonStyle={styles.backButton}
           containerStyle={styles.backButtonContainer}
           titleStyle={styles.backTitle}
+          onPress={() => navigation.pop()}
         />
       </View>
       <StatusBar barStyle="light-content" />

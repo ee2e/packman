@@ -7,7 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
 
 export default function SingIn({ navigation }) {
-  const goToSignUp = () => navigation.navigator("SignUp");
+  const goToSignUp = () => navigation.navigate("SignUp");
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/logo.gif")} style={styles.logo} />
