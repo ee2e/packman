@@ -1,6 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Text, Button } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -11,10 +16,12 @@ export default function SingIn({ navigation }) {
   const goToFind = () => navigation.navigate("Find");
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <Image source={require("../../assets/logo.gif")} style={styles.logo} />
       <Input
-        label="이메일"
         containerStyle={styles.inputContainer}
         inputStyle={styles.input}
         placeholder="email@address.com"
@@ -22,8 +29,7 @@ export default function SingIn({ navigation }) {
       />
       <Input
         containerStyle={styles.inputContainer}
-        label="비밀번호"
-        placeholder="Password"
+        placeholder="비밀번호"
         secureTextEntry={true}
         leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
       />
@@ -40,7 +46,7 @@ export default function SingIn({ navigation }) {
       <TouchableOpacity onPress={goToSignUp}>
         <Text style={styles.text}>회원가입</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -54,7 +60,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 150,
     height: 88,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   text: {
     fontFamily: "BMHANNA",
@@ -62,7 +68,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   inputContainer: {
-    width: 270,
+    width: 300,
   },
   button: {
     backgroundColor: "#03bcdb",

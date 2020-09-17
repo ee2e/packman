@@ -58,13 +58,13 @@ export default class LoginScreen2 extends Component {
     const { navigation } = this.props;
 
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         <Image source={require("../../assets/logo.gif")} style={styles.logo} />
         <View>
-          <KeyboardAvoidingView
-            contentContainerStyle={styles.loginContainer}
-            behavior="position"
-          >
+          <View style={styles.loginContainer}>
             <View style={{ flexDirection: "row" }}>
               <Button
                 disabled={isLoading}
@@ -98,7 +98,6 @@ export default class LoginScreen2 extends Component {
             <View style={styles.formContainer}>
               {isSignUpPage && (
                 <Input
-                  label="이메일"
                   containerStyle={styles.inputContainer}
                   inputStyle={styles.input}
                   placeholder="email@address.com"
@@ -109,7 +108,6 @@ export default class LoginScreen2 extends Component {
               )}
               <Input
                 containerStyle={styles.inputContainer}
-                label="이름"
                 placeholder="홍길동"
                 leftIcon={
                   <MaterialIcons name="person" size={24} color="#03bcdb" />
@@ -117,7 +115,6 @@ export default class LoginScreen2 extends Component {
               />
               <Input
                 containerStyle={styles.inputContainer}
-                label="폰 번호"
                 placeholder="0101234567"
                 leftIcon={
                   <MaterialIcons name="smartphone" size={24} color="#03bcdb" />
@@ -141,9 +138,9 @@ export default class LoginScreen2 extends Component {
                 />
               </View>
             </View>
-          </KeyboardAvoidingView>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
