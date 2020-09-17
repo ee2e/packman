@@ -102,4 +102,31 @@ sre_constants.error: bad character range s-1 at position 12
 
 > darkflow는 이미지를 .xml로 요구함
 
- 
+
+
+> TensorFlow를 기반으로 학습한 모델은 가중치 정보를 포함하는 파일로 변환하여 다양한 플랫폼에 적용할 수 있다.
+
+> Darkflow 역시 TensorFlow를 기반으로하기 때문에 Darkflow를 이용해 학습한 모델을 여러 응용 프로그램에 적용하는 것은 어렵지 않다. 
+> -> Darknet 대신 Darkflow를 사용한 이유
+
+
+
+> --summary /<저장경로>
+> tensorboard --logdir=./
+
+
+
+> 모든 존재하는 TensorBoard를 Kill하려면
+> pkill -f "tensorboard"
+
+
+
+> ./flow --model cfg/yolo.cfg --load -1 --savepb
+
+
+
+> flow_from_directory는 이미지를 불러올 때 폴더명에 맞춰 자동으로 labelling을 해주기 때문입니다.
+
+
+
+> 이미지 크기 416x416
