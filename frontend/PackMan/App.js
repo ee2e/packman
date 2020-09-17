@@ -13,30 +13,13 @@ const bmhannaFonts = {
 };
 
 export default function App() {
-  const [isReady, setIsReady] = useState(false);
   const [isLoaded] = useFonts(bmhannaFonts);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsReady(true);
-    }, 2000);
-  }, []);
 
   if (!isLoaded) {
     return <AppLoading />;
   }
 
-  return isReady ? (
-    <Gate />
-  ) : (
-    <View style={styles.container}>
-      <Image source={require("./assets/logo.gif")} style={styles.logo} />
-      <Text h3 style={styles.text}>
-        PACK-MAN
-      </Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  return <Gate />;
 }
 
 const styles = StyleSheet.create({
