@@ -3,8 +3,11 @@ import React from "react";
 import {
   StyleSheet,
   KeyboardAvoidingView,
+  View,
   Image,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Text, Button } from "react-native-elements";
 
@@ -14,38 +17,51 @@ import { Input } from "react-native-elements";
 export default function SingIn({ navigation }) {
   const goToSignUp = () => navigation.navigate("SignUp");
   const goToFind = () => navigation.navigate("Find");
+  const login = () => {};
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <Image source={require("../../assets/logo.gif")} style={styles.logo} />
-      <Input
-        containerStyle={styles.inputContainer}
-        inputStyle={styles.input}
-        placeholder="email@address.com"
-        leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
-      />
-      <Input
-        containerStyle={styles.inputContainer}
-        placeholder="비밀번호"
-        secureTextEntry={true}
-        leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
-      />
-      <Button
-        title="로그인"
-        buttonStyle={styles.button}
-        containerStyle={styles.buttonContainer}
-        titleStyle={styles.title}
-      />
-      <Image source={require("../../assets/kakao_login.png")} />
-      <TouchableOpacity onPress={goToFind}>
-        <Text style={styles.text}>이메일 / 비밀번호 찾기</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={goToSignUp}>
-        <Text style={styles.text}>회원가입</Text>
-      </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <Image
+            source={require("../../assets/logo.gif")}
+            style={styles.logo}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            inputStyle={styles.input}
+            placeholder="email@address.com"
+            keyboardType="email-address"
+            returnKeyType="next"
+            onSubmitEditing={() => this.passwordInput.focus()}
+            leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="비밀번호"
+            ref={(input) => (this.passwordInput = input)}
+            onSubmitEditing={login}
+            secureTextEntry={true}
+            leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
+          />
+          <Button
+            title="로그인"
+            buttonStyle={styles.button}
+            containerStyle={styles.buttonContainer}
+            titleStyle={styles.title}
+          />
+          <Image source={require("../../assets/kakao_login.png")} />
+          <TouchableOpacity onPress={goToFind}>
+            <Text style={styles.text}>이메일 / 비밀번호 찾기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToSignUp}>
+            <Text style={styles.text}>회원가입</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
@@ -54,6 +70,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  inner: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },

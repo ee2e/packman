@@ -1,6 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, KeyboardAvoidingView, View, Image } from "react-native";
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { Button } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -12,51 +19,59 @@ export default function SingIn({ navigation }) {
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <Image source={require("../../assets/logo.gif")} style={styles.logo} />
-      <Input
-        containerStyle={styles.inputContainer}
-        inputStyle={styles.input}
-        placeholder="email@address.com"
-        leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
-      />
-      <Input
-        containerStyle={styles.inputContainer}
-        placeholder="비밀번호"
-        secureTextEntry={true}
-        leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
-      />
-      <Input
-        containerStyle={styles.inputContainer}
-        placeholder="비밀번호 확인"
-        secureTextEntry={true}
-        leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
-      />
-      <Input
-        containerStyle={styles.inputContainer}
-        placeholder="홍길동"
-        leftIcon={<MaterialIcons name="person" size={24} color="#03bcdb" />}
-      />
-      <Input
-        containerStyle={styles.inputContainer}
-        placeholder="0101234567"
-        leftIcon={<MaterialIcons name="smartphone" size={24} color="#03bcdb" />}
-      />
-      <View style={styles.buttonsContainer}>
-        <Button
-          title="회원가입"
-          buttonStyle={styles.signUpButton}
-          containerStyle={styles.signUpButtonContainer}
-          titleStyle={styles.signUpTitle}
-        />
-        <Button
-          title="뒤로"
-          buttonStyle={styles.backButton}
-          containerStyle={styles.backButtonContainer}
-          titleStyle={styles.backTitle}
-          onPress={() => navigation.goBack()}
-        />
-      </View>
-      <StatusBar barStyle="light-content" />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <Image
+            source={require("../../assets/logo.gif")}
+            style={styles.logo}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            inputStyle={styles.input}
+            placeholder="email@address.com"
+            leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="비밀번호"
+            secureTextEntry={true}
+            leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="비밀번호 확인"
+            secureTextEntry={true}
+            leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="홍길동"
+            leftIcon={<MaterialIcons name="person" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="0101234567"
+            leftIcon={
+              <MaterialIcons name="smartphone" size={24} color="#03bcdb" />
+            }
+          />
+          <View style={styles.buttonsContainer}>
+            <Button
+              title="회원가입"
+              buttonStyle={styles.signUpButton}
+              containerStyle={styles.signUpButtonContainer}
+              titleStyle={styles.signUpTitle}
+            />
+            <Button
+              title="뒤로"
+              buttonStyle={styles.backButton}
+              containerStyle={styles.backButtonContainer}
+              titleStyle={styles.backTitle}
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
@@ -65,6 +80,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  inner: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },

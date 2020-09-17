@@ -8,6 +8,8 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Input, Button } from "react-native-elements";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -62,84 +64,93 @@ export default class LoginScreen2 extends Component {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        <Image source={require("../../assets/logo.gif")} style={styles.logo} />
-        <View>
-          <View style={styles.loginContainer}>
-            <View style={{ flexDirection: "row" }}>
-              <Button
-                disabled={isLoading}
-                type="clear"
-                activeOpacity={0.7}
-                onPress={() => this.selectCategory(0)}
-                containerStyle={{ flex: 1 }}
-                titleStyle={[
-                  styles.categoryText,
-                  isLoginPage && styles.selectedCategoryText,
-                ]}
-                title={"이메일 찾기"}
-              />
-              <Button
-                disabled={isLoading}
-                type="clear"
-                activeOpacity={0.7}
-                onPress={() => this.selectCategory(1)}
-                containerStyle={{ flex: 1 }}
-                titleStyle={[
-                  styles.categoryText,
-                  isSignUpPage && styles.selectedCategoryText,
-                ]}
-                title={"비밀번호 찾기"}
-              />
-            </View>
-            <View style={styles.rowSelector}>
-              <TabSelector selected={isLoginPage} />
-              <TabSelector selected={isSignUpPage} />
-            </View>
-            <View style={styles.formContainer}>
-              {isSignUpPage && (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inner}>
+            <Image
+              source={require("../../assets/logo.gif")}
+              style={styles.logo}
+            />
+            <View style={styles.loginContainer}>
+              <View style={{ flexDirection: "row" }}>
+                <Button
+                  disabled={isLoading}
+                  type="clear"
+                  activeOpacity={0.7}
+                  onPress={() => this.selectCategory(0)}
+                  containerStyle={{ flex: 1 }}
+                  titleStyle={[
+                    styles.categoryText,
+                    isLoginPage && styles.selectedCategoryText,
+                  ]}
+                  title={"이메일 찾기"}
+                />
+                <Button
+                  disabled={isLoading}
+                  type="clear"
+                  activeOpacity={0.7}
+                  onPress={() => this.selectCategory(1)}
+                  containerStyle={{ flex: 1 }}
+                  titleStyle={[
+                    styles.categoryText,
+                    isSignUpPage && styles.selectedCategoryText,
+                  ]}
+                  title={"비밀번호 찾기"}
+                />
+              </View>
+              <View style={styles.rowSelector}>
+                <TabSelector selected={isLoginPage} />
+                <TabSelector selected={isSignUpPage} />
+              </View>
+              <View style={styles.formContainer}>
+                {isSignUpPage && (
+                  <Input
+                    containerStyle={styles.inputContainer}
+                    inputStyle={styles.input}
+                    placeholder="email@address.com"
+                    leftIcon={
+                      <MaterialIcons name="email" size={24} color="#03bcdb" />
+                    }
+                  />
+                )}
                 <Input
                   containerStyle={styles.inputContainer}
-                  inputStyle={styles.input}
-                  placeholder="email@address.com"
+                  placeholder="홍길동"
                   leftIcon={
-                    <MaterialIcons name="email" size={24} color="#03bcdb" />
+                    <MaterialIcons name="person" size={24} color="#03bcdb" />
                   }
                 />
-              )}
-              <Input
-                containerStyle={styles.inputContainer}
-                placeholder="홍길동"
-                leftIcon={
-                  <MaterialIcons name="person" size={24} color="#03bcdb" />
-                }
-              />
-              <Input
-                containerStyle={styles.inputContainer}
-                placeholder="0101234567"
-                leftIcon={
-                  <MaterialIcons name="smartphone" size={24} color="#03bcdb" />
-                }
-              />
-              <View style={styles.buttonsContainer}>
-                <Button
-                  title="확인"
-                  buttonStyle={styles.findButton}
-                  containerStyle={styles.findButtonContainer}
-                  titleStyle={styles.findTitle}
-                  loading={isLoading}
-                  disabled={isLoading}
+                <Input
+                  containerStyle={styles.inputContainer}
+                  placeholder="0101234567"
+                  leftIcon={
+                    <MaterialIcons
+                      name="smartphone"
+                      size={24}
+                      color="#03bcdb"
+                    />
+                  }
                 />
-                <Button
-                  title="뒤로"
-                  buttonStyle={styles.backButton}
-                  containerStyle={styles.backButtonContainer}
-                  titleStyle={styles.backTitle}
-                  onPress={() => navigation.goBack()}
-                />
+                <View style={styles.buttonsContainer}>
+                  <Button
+                    title="확인"
+                    buttonStyle={styles.findButton}
+                    containerStyle={styles.findButtonContainer}
+                    titleStyle={styles.findTitle}
+                    loading={isLoading}
+                    disabled={isLoading}
+                  />
+                  <Button
+                    title="뒤로"
+                    buttonStyle={styles.backButton}
+                    containerStyle={styles.backButtonContainer}
+                    titleStyle={styles.backTitle}
+                    onPress={() => navigation.goBack()}
+                  />
+                </View>
               </View>
             </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     );
   }
@@ -149,6 +160,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  inner: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
