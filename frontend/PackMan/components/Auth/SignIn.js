@@ -9,15 +9,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { Text, Button } from "react-native-elements";
+import { Text, Button, Input } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
-import { Input } from "react-native-elements";
 
 export default function SingIn({ navigation }) {
   const goToSignUp = () => navigation.navigate("SignUp");
   const goToFind = () => navigation.navigate("Find");
-  const login = () => {};
+  const signIn = () => {};
 
   return (
     <KeyboardAvoidingView
@@ -43,7 +42,7 @@ export default function SingIn({ navigation }) {
             containerStyle={styles.inputContainer}
             placeholder="비밀번호"
             ref={(input) => (this.passwordInput = input)}
-            onSubmitEditing={login}
+            onSubmitEditing={signIn}
             secureTextEntry={true}
             leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
           />
