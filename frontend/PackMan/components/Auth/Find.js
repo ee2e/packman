@@ -53,8 +53,10 @@ export default class LoginScreen2 extends Component {
     });
   }
 
+  find() {}
+
   render() {
-    const { selectedCategory, isLoading } = this.state;
+    const { selectedCategory, isLoading, find } = this.state;
     const isLoginPage = selectedCategory === 0;
     const isSignUpPage = selectedCategory === 1;
     const { navigation } = this.props;
@@ -107,21 +109,42 @@ export default class LoginScreen2 extends Component {
                     containerStyle={styles.inputContainer}
                     inputStyle={styles.input}
                     placeholder="email@address.com"
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    onSubmitEditing={() => this.userNameInput.focus()}
                     leftIcon={
                       <MaterialIcons name="email" size={24} color="#03bcdb" />
                     }
                   />
                 )}
-                <Input
-                  containerStyle={styles.inputContainer}
-                  placeholder="홍길동"
-                  leftIcon={
-                    <MaterialIcons name="person" size={24} color="#03bcdb" />
-                  }
-                />
+                {isSignUpPage ? (
+                  <Input
+                    containerStyle={styles.inputContainer}
+                    placeholder="홍길동"
+                    returnKeyType="next"
+                    ref={(input) => (this.userNameInput = input)}
+                    onSubmitEditing={() => this.phoneNumberInput.focus()}
+                    leftIcon={
+                      <MaterialIcons name="person" size={24} color="#03bcdb" />
+                    }
+                  />
+                ) : (
+                  <Input
+                    containerStyle={styles.inputContainer}
+                    placeholder="홍길동"
+                    returnKeyType="next"
+                    onSubmitEditing={() => this.phoneNumberInput.focus()}
+                    leftIcon={
+                      <MaterialIcons name="person" size={24} color="#03bcdb" />
+                    }
+                  />
+                )}
+
                 <Input
                   containerStyle={styles.inputContainer}
                   placeholder="0101234567"
+                  ref={(input) => (this.phoneNumberInput = input)}
+                  onSubmitEditing={find}
                   leftIcon={
                     <MaterialIcons
                       name="smartphone"
