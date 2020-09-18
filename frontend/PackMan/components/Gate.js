@@ -1,11 +1,12 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import Auth from "./Auth/Auth";
+import Main from "./Main/Home";
 
 function Gate() {
   return (
     <NavigationContainer>
-      <Auth />
+      <Main />
     </NavigationContainer>
   );
 }
