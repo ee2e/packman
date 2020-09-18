@@ -1,59 +1,94 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
-import { Text, Button } from "react-native-elements";
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import { Button, Input } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { Input } from "react-native-elements";
 
-export default function SingIn() {
+export default function SingIn({ navigation }) {
+  const signUp = () => {};
+
   return (
-    <View style={styles.container}>
-      <Image source={require("../../assets/logo.gif")} style={styles.logo} />
-      <Input
-        label="이메일"
-        containerStyle={styles.inputContainer}
-        inputStyle={styles.input}
-        placeholder="email@address.com"
-        leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
-      />
-      <Input
-        containerStyle={styles.inputContainer}
-        label="비밀번호"
-        placeholder="Password"
-        secureTextEntry={true}
-        leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
-      />
-      <Input
-        containerStyle={styles.inputContainer}
-        label="비밀번호확인"
-        placeholder="Password Confirm"
-        secureTextEntry={true}
-        leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
-      />
-      <Input
-        containerStyle={styles.inputContainer}
-        label="이름"
-        placeholder="User Name"
-        leftIcon={<MaterialIcons name="person" size={24} color="#03bcdb" />}
-      />
-      <View style={styles.buttonsContainer}>
-        <Button
-          title="회원가입"
-          buttonStyle={styles.signUpButton}
-          containerStyle={styles.signUpButtonContainer}
-          titleStyle={styles.signUpTitle}
-        />
-        <Button
-          title="뒤로"
-          buttonStyle={styles.backButton}
-          containerStyle={styles.backButtonContainer}
-          titleStyle={styles.backTitle}
-        />
-      </View>
-      <StatusBar barStyle="light-content" />
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <Image
+            source={require("../../assets/logo.gif")}
+            style={styles.logo}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            inputStyle={styles.input}
+            placeholder="email@address.com"
+            keyboardType="email-address"
+            returnKeyType="next"
+            onSubmitEditing={() => this.passwordInput.focus()}
+            leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="비밀번호"
+            secureTextEntry={true}
+            returnKeyType="next"
+            ref={(input) => (this.passwordInput = input)}
+            onSubmitEditing={() => this.passwordConfirmInput.focus()}
+            leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="비밀번호 확인"
+            secureTextEntry={true}
+            returnKeyType="next"
+            ref={(input) => (this.passwordConfirmInput = input)}
+            onSubmitEditing={() => this.userNameInput.focus()}
+            leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="홍길동"
+            returnKeyType="next"
+            ref={(input) => (this.userNameInput = input)}
+            onSubmitEditing={() => this.phoneNumberInput.focus()}
+            leftIcon={<MaterialIcons name="person" size={24} color="#03bcdb" />}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder="0101234567"
+            keyboardType="number-pad"
+            ref={(input) => (this.phoneNumberInput = input)}
+            onSubmitEditing={signUp}
+            leftIcon={
+              <MaterialIcons name="smartphone" size={24} color="#03bcdb" />
+            }
+          />
+          <View style={styles.buttonsContainer}>
+            <Button
+              title="회원가입"
+              buttonStyle={styles.signUpButton}
+              containerStyle={styles.signUpButtonContainer}
+              titleStyle={styles.signUpTitle}
+            />
+            <Button
+              title="뒤로"
+              buttonStyle={styles.backButton}
+              containerStyle={styles.backButtonContainer}
+              titleStyle={styles.backTitle}
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -61,13 +96,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  inner: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
   logo: {
     width: 150,
+    // 36.5%
     height: 88,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   text: {
     fontFamily: "BMHANNA",
@@ -75,7 +114,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   inputContainer: {
-    width: 270,
+    width: 300,
   },
   signUpButton: {
     backgroundColor: "#03bcdb",
