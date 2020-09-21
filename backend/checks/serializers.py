@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Check_list
 from accounts.serializers import UserSerializer
-
+# image 
 class CheckListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Check_list
