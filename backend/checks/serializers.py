@@ -1,14 +1,27 @@
 from rest_framework import serializers
-from .models import Check_list
+from .models import Check_list, CheckImage
 from accounts.serializers import UserSerializer
-# image init
+
+class CheckImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CheckImage
+        fields = ['image']
+
 class CheckListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Check_list
         fields = ['id', 'content', 'place', 'stufflist']
 
 class CheckSerializer(serializers.ModelSerializer):
+    images = CheckImageSerializer(many=True, read_only=True)
     user = UserSerializer(required=False) #create에서 is_valid()에서 유무검증을 pass
     class Meta:
         model = Check_list
-        fields = ['id', 'content', 'date', 'user'] #'__all__' #
+        fields = ['id', 'content', 'date', 'user', 'images'] #'__all__' #
+
+        def create(self, validated_data):
+            images_data = self.context['request'].FILES
+            checklist = Check_list.objects.create(**validated_data)
+            for image_data in images_data.getlist('image'):
+                CheckImage.objects.create(post=post, image=image_data)
+            return checklist
