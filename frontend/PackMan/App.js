@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, Clipboard } from "react-native";
 
 import { Text } from "react-native-elements";
 import { useFonts } from "@use-expo/font";
@@ -17,6 +17,11 @@ export default function App() {
 
   if (!isLoaded) {
     return <AppLoading />;
+  }
+
+  // HACK: Prevent "Expo pasted from CoreSimulator" notification from spamming continuously
+  if (__DEV__) {
+    Clipboard.setString("");
   }
 
   return <Gate />;
