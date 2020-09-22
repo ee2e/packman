@@ -20,6 +20,9 @@ class recommand(models.Model):
     place = models.CharField(max_length=30)
     plusstuff = models.CharField(max_length=30)
 
+def upload_path(instance, filename):
+    return '/'.join['covers', str(instance.checklist), filename]
+
 class CheckImage(models.Model):
     checklist = models.ForeignKey(Check_list, on_delete=models.CASCADE)
-    image = models.ImageField(blank=True)
+    image = models.ImageField(blank=True, null=True, upload_to=upload_path)
