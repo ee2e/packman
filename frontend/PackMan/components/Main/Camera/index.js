@@ -34,7 +34,35 @@ export default function Shot() {
             backgroundColor: 'transparent',
             flexDirection: 'row',
           }}>
-          
+          <TouchableOpacity
+            style={{marginTop: 550, marginLeft: 160}}
+            onPress={async() => {
+              if(cameraRef){
+                let photo = await cameraRef.takePictureAsync();
+                console.log('photo', photo);
+              }
+            }}>
+              <View style={{
+                borderWidth: 2,
+                borderRadius: "50%",
+                borderColor: 'white',
+                height: 50,
+                width: 50,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                <View style={{
+                  borderWidth: 2,
+                  borderRadius: "50%",
+                  borderColor: 'white',
+                  height: 40,
+                  width: 40,
+                  backgroundColor: 'white'
+                }}>
+                </View>
+              </View>
+          </TouchableOpacity>
         </View>
       </Camera>
     </View>
