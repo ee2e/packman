@@ -8,20 +8,21 @@ class CheckImageSerializer(serializers.ModelSerializer):
         fields = ['image']
 
 class CheckListSerializer(serializers.ModelSerializer):
+    # user = UserSerializer(required=False)
     class Meta:
         model = Check_list
-        fields = ['id', 'content', 'place', 'stufflist']
+        fields = ['id', 'content', 'place', 'stufflist', 'user']
 
 class CheckSerializer(serializers.ModelSerializer):
-    images = CheckImageSerializer(many=True, read_only=True)
+    # images = CheckImageSerializer(many=True, read_only=True)
     user = UserSerializer(required=False) #create에서 is_valid()에서 유무검증을 pass
     class Meta:
         model = Check_list
-        fields = ['id', 'content', 'date', 'user', 'images'] #'__all__' #
+        fields ='__all__' # ['id', 'content', 'date', 'user'] 
 
-        def create(self, validated_data):
-            images_data = self.context['request'].FILES
-            checklist = Check_list.objects.create(**validated_data)
-            for image_data in images_data.getlist('image'):
-                CheckImage.objects.create(post=post, image=image_data)
-            return checklist
+        # def create(self, validated_data):
+        #     images_data = self.context['request'].FILES
+        #     checklist = Check_list.objects.create(**validated_data)
+        #     for image_data in images_data.getlist('image'):
+        #         CheckImage.objects.create(post=post, image=image_data)
+        #     return checklist
