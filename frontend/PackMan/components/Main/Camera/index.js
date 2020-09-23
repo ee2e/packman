@@ -63,13 +63,16 @@ export default function TakePhoto() {
 
                 const response = await fetch(photo.uri);
                 const blob = await response.blob();
-                
+                let _date = new Date();
+                let _today = `${_date.getFullYear()}-${_date.getMonth()+1}-${_date.getDate()}`;
+
                 var params = {
                   Bucket: albumBucketName,
-                  Key: `${photo.fileName}.jpeg`,
+                  Key: `${_today}.jpeg`,
                   Body: blob,
                   ACL: 'public-read',
                 }
+
 
                 s3.upload(params, function(err, data) {
                   if (err) {
