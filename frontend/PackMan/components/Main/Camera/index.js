@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Camera } from 'expo-camera';
 import AWS from 'aws-sdk/dist/aws-sdk-react-native';
-import * as MediaLibrary from 'expo-media-library';
 
 var albumBucketName = 'pack-man';
 var bucketRegion = 'ap-northeast-2';
@@ -59,7 +58,7 @@ export default function TakePhoto() {
                 const file = {
                   uri: photo.uri,
                   name: photo.fileName,
-                  type: 'image/png'
+                  type: 'image/jpeg'
                 }
 
                 const response = await fetch(photo.uri);
@@ -67,9 +66,9 @@ export default function TakePhoto() {
                 
                 var params = {
                   Bucket: albumBucketName,
-                  Key: `'${photo.fileName}'.png`,
+                  Key: `${photo.fileName}.jpeg`,
                   Body: blob,
-                  ACL: 'public-read'
+                  ACL: 'public-read',
                 }
 
                 s3.upload(params, function(err, data) {
