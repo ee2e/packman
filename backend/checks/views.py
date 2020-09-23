@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import CheckListSerializer, CheckSerializer
+from .serializers import CheckListSerializer, CheckSerializer, StuffSerializer
 from .models import Check_list
 
 @api_view(['GET'])
@@ -24,4 +24,12 @@ def create_check(request):
     serializer = CheckSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)  # NOT NULL CONSTRAINT FAILD #user_id=1 
+        return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_list(request):
+    serializer = StuffSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(commit=False)  # NOT NULL CONSTRAINT FAILD #user_id=1 
         return Response(serializer.data)

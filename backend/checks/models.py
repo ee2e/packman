@@ -13,8 +13,8 @@ class Check_list(models.Model):
     
 
 class Stuff(models.Model):
-    stuffname = models.CharField(max_length=10)
     check_id = models.ForeignKey(Check_list, on_delete=models.CASCADE)
+    stuffname = models.CharField(max_length=10)
 
 class recommand(models.Model):
     place = models.CharField(max_length=30)
@@ -25,4 +25,4 @@ def upload_path(instance, filename):
 
 class CheckImage(models.Model):
     checklist = models.ForeignKey(Check_list, on_delete=models.CASCADE)
-    image = models.ImageField(blank=True, null=True, upload_to=upload_path)
+    # image = models.ImageField(blank=True, null=True, upload_to=upload_path)
