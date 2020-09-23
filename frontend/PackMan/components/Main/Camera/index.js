@@ -1,11 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Camera } from 'expo-camera';
+import AWS from 'aws-sdk/dist/aws-sdk-react-native';
+import * as MediaLibrary from 'expo-media-library';
 
-export default function Shot() {
+var albumBucketName = 'pack-man';
+var bucketRegion = 'ap-northeast-2';
+var IdentityPoolId = 'ap-northeast-2:2673b02d-7976-4784-ab48-7e398dd27835';
+
+AWS.config.update({
+  region: bucketRegion,
+  credentials: new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: IdentityPoolId
+  })
+});
+
+var s3 = new AWS.S3({
+  apiVersion: '2006-03-01',
+  params: {Bucket: albumBucketName}
+});
+
+export default function TakePhoto() {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
     (async () => {
@@ -24,7 +41,7 @@ export default function Shot() {
     <View style={{ flex: 1 }}>
       <Camera 
         style={{ flex: 1 }} 
-        type={type}
+        type={Camera.Constants.Type.back}
         ref={ref => {
           setCameraRef(ref);
       }}>
@@ -35,26 +52,35 @@ export default function Shot() {
             flexDirection: 'row',
           }}>
           <TouchableOpacity
-            style={{
-              flex: 0.1,
-              alignSelf: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{marginTop: 550, marginLeft: 143}}
+            style={{marginTop: 550, marginLeft: 160}}
             onPress={async() => {
               if(cameraRef){
                 let photo = await cameraRef.takePictureAsync();
-                console.log('photo', photo);
+                const file = {
+                  uri: photo.uri,
+                  name: photo.fileName,
+                  type: 'image/png'
+                }
+
+                const response = await fetch(photo.uri);
+                const blob = await response.blob();
+                
+                var params = {
+                  Bucket: albumBucketName,
+                  Key: `'${photo.fileName}'.png`,
+                  Body: blob,
+                  ACL: 'public-read'
+                }
+
+                s3.upload(params, function(err, data) {
+                  if (err) {
+                      console.log(err);
+                      return alert('There was an error uploading your photo');
+                  }
+                  alert('Successfully uploaded photo.');
+              });
+                
+                console.log(file);
               }
             }}>
               <View style={{
