@@ -1,11 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Image, Clipboard } from "react-native";
+import { StyleSheet, Clipboard } from "react-native";
 
-import { Text } from "react-native-elements";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+
 import { useFonts } from "@use-expo/font";
 import { AppLoading } from "expo";
 
+import store, { persistor } from "./redux/store";
 import Gate from "./components/Gate";
 
 const bmhannaFonts = {
@@ -24,7 +27,13 @@ export default function App() {
     Clipboard.setString("");
   }
 
-  return <Gate />;
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Gate />
+      </PersistGate>
+    </Provider>
+  );
 }
 
 const styles = StyleSheet.create({
