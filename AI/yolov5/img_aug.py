@@ -47,7 +47,7 @@ def read_train_dataset(dir):
 
 ia.seed(1)
 
-dir = './data/pants/'
+dir = './data/socks/'
 images, annotations = read_train_dataset(dir)
 size = len(images)
 
@@ -72,17 +72,17 @@ for idx in range(size * 5):
     # ])
 
     seq = iaa.Sequential([
-        iaa.Fliplr(0.5),    # horizontal flip
-        iaa.Flipud(0.2),    # vertically flip
+        iaa.Fliplr(0.5),    # horizontal flips
+        iaa.Flipud(0.2),  # vertically flip 20% of all images
         iaa.Multiply((1.2, 1.5)),  # change brightness, doesn't affect BBs
         iaa.Affine(
             scale={"x": (0.8, 1.0), "y": (0.8, 1.0)},
             translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)},
         ),  # translate by 40/60px on x/y axis, and scale to 50-70%, affects BBs
-        iaa.AdditiveGaussianNoise(scale=0.1 * 255),
-        iaa.CoarseDropout(0.02, size_percent=0.15, per_channel=0.5),
+        iaa.AdditiveGaussianNoise(scale=0.1 * 255), # 가우시안 필터
+        iaa.CoarseDropout(0.02, size_percent=0.20, per_channel=0.5), # dot
         iaa.ClipCBAsToImagePlanes(),
-        iaa.Sharpen(alpha=0.5)
+        # iaa.Sharpen(alpha=0.5) # 흐린 점
         ], random_order=True)
 
     # seq = iaa.Sequential([
@@ -196,31 +196,31 @@ for idx in range(size * 5):
     image_aug = seq_det.augment_images([image])[0]
     bbs_aug = seq_det.augment_bounding_boxes([bbs])[0]
 
-    new_image_file = dir + 'new_' + str(idx+1) + '_' + annotations[idx % size][2]
-    cv2.imwrite(new_image_file, image_aug)
-
-    h, w = np.shape(image_aug)[0:2]
-    voc_writer = Writer(new_image_file, w, h)
-
-    for i in range(len(bbs_aug.bounding_boxes)):
-        bb_box = bbs_aug.bounding_boxes[i]
-        voc_writer.addObject(boxes[i][0], int(bb_box.x1), int(bb_box.y1), int(bb_box.x2), int(bb_box.y2))
-
-    voc_writer.save(dir + 'new_' + str(idx+1) + '_' + annotations[idx % size][1])
-
-    # for i in range(len(bbs.bounding_boxes)):
-    #     before = bbs.bounding_boxes[i]
-    #     after = bbs_aug.bounding_boxes[i]
-    #     print("BB %d: (%.4f, %.4f, %.4f, %.4f) -> (%.4f, %.4f, %.4f, %.4f)" % (
-    #         i,
-    #         before.x1, before.y1, before.x2, before.y2,
-    #         after.x1, after.y1, after.x2, after.y2)
-    #           )
+    # new_image_file = dir + 'new_' + str(idx+1) + '_' + annotations[idx % size][2]
+    # cv2.imwrite(new_image_file, image_aug)
     #
-    # image_before = bbs.draw_on_image(image, thickness=10)
-    # image_after = bbs_aug.draw_on_image(image_aug, thickness=10, color=[0, 0, 255])
+    # h, w = np.shape(image_aug)[0:2]
+    # voc_writer = Writer(new_image_file, w, h)
     #
-    # cv2.imshow('image_before', cv2.resize(image_before, (500, 500)))
-    # cv2.imshow('image_after', cv2.resize(image_after, (500, 500)))
+    # for i in range(len(bbs_aug.bounding_boxes)):
+    #     bb_box = bbs_aug.bounding_boxes[i]
+    #     voc_writer.addObject(boxes[i][0], int(bb_box.x1), int(bb_box.y1), int(bb_box.x2), int(bb_box.y2))
     #
-    # cv2.waitKey(0)
+    # voc_writer.save(dir + 'new_' + str(idx+1) + '_' + annotations[idx % size][1])
+
+    for i in range(len(bbs.bounding_boxes)):
+        before = bbs.bounding_boxes[i]
+        after = bbs_aug.bounding_boxes[i]
+        print("BB %d: (%.4f, %.4f, %.4f, %.4f) -> (%.4f, %.4f, %.4f, %.4f)" % (
+            i,
+            before.x1, before.y1, before.x2, before.y2,
+            after.x1, after.y1, after.x2, after.y2)
+              )
+
+    image_before = bbs.draw_on_image(image, thickness=10)
+    image_after = bbs_aug.draw_on_image(image_aug, thickness=10, color=[0, 0, 255])
+
+    cv2.imshow('image_before', cv2.resize(image_before, (500, 500)))
+    cv2.imshow('image_after', cv2.resize(image_after, (500, 500)))
+
+    cv2.waitKey(0)
