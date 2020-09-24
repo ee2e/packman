@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
+import { EvilIcons } from "@expo/vector-icons";
 
 var albumBucketName = "pack-man";
 var bucketRegion = "ap-northeast-2";
@@ -19,7 +20,7 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-export default function TakePhoto() {
+export default function TakePhoto({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
 
@@ -38,8 +39,15 @@ export default function TakePhoto() {
   }
   return (
     <View style={{ flex: 1 }}>
+      <EvilIcons
+        name="close"
+        size={30}
+        color="black"
+        style={{ marginTop: 50, marginBottom: 10, marginLeft: 10 }}
+        onPress={() => navigation.goBack()}
+      />
       <Camera
-        style={{ flex: 1 }}
+        style={{ height: 500 }}
         type={Camera.Constants.Type.back}
         ref={(ref) => {
           setCameraRef(ref);
@@ -53,7 +61,11 @@ export default function TakePhoto() {
           }}
         >
           <TouchableOpacity
-            style={{ marginTop: 550, marginLeft: 160 }}
+            style={{
+              flex: 1,
+              alignItems: "center",
+              marginTop: 540,
+            }}
             onPress={async () => {
               if (cameraRef) {
                 let photo = await cameraRef.takePictureAsync();
@@ -95,7 +107,7 @@ export default function TakePhoto() {
               style={{
                 borderWidth: 2,
                 borderRadius: "50%",
-                borderColor: "white",
+                borderColor: "#03bcdb",
                 height: 50,
                 width: 50,
                 display: "flex",
@@ -107,10 +119,10 @@ export default function TakePhoto() {
                 style={{
                   borderWidth: 2,
                   borderRadius: "50%",
-                  borderColor: "white",
+                  borderColor: "#03bcdb",
                   height: 40,
                   width: 40,
-                  backgroundColor: "white",
+                  backgroundColor: "#03bcdb",
                 }}
               ></View>
             </View>
