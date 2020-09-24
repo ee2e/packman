@@ -58,14 +58,15 @@ export default function TakePhoto() {
                 const file = {
                   uri: photo.uri,
                   name: photo.fileName,
-                  type: 'image/jpeg'
+                  type: 'image/jpg'
                 }
 
                 const response = await fetch(photo.uri);
                 const blob = await response.blob();
                 let _date = new Date();
-                let _today = `${_date.getFullYear()}-${_date.getMonth()+1}-${_date.getDate()}`;
+                let _today = `${_date.getFullYear()}${_date.getMonth()+1}${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
+                // 업로드 속성 설정
                 var params = {
                   Bucket: albumBucketName,
                   Key: `${_today}.jpeg`,
@@ -73,7 +74,7 @@ export default function TakePhoto() {
                   ACL: 'public-read',
                 }
 
-
+                // 업로드
                 s3.upload(params, function(err, data) {
                   if (err) {
                       console.log(err);
@@ -82,7 +83,9 @@ export default function TakePhoto() {
                   alert('Successfully uploaded photo.');
               });
                 
-                console.log(file);
+                console.log(params);
+                
+                
               }
             }}>
               <View style={{
