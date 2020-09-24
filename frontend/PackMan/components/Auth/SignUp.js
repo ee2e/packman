@@ -12,6 +12,7 @@ import { Button, Input } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
+import utils from "../../utils";
 import api from "../../api";
 
 export default class SingIn extends Component {
@@ -27,7 +28,7 @@ export default class SingIn extends Component {
     };
   }
 
-  doSignUp = async (event) => {
+  isFormValid = () => {
     const {
       email,
       password,
@@ -35,6 +36,33 @@ export default class SingIn extends Component {
       username,
       phoneNumber,
     } = this.state;
+    if (
+      email === "" ||
+      password === "" ||
+      passwordConfirm === "" ||
+      username === "" ||
+      phoneNumber === ""
+    ) {
+      alert("모든 필드를 채워주세요.");
+      return false;
+    }
+    if (!utils.isEmail(email)) {
+      alert("올바른 이메일을 작성해주세요.");
+      return false;
+    }
+    if (password !== passwordConfirm) {
+      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+    }
+    return true;
+  };
+
+  doSignUp = async (event) => {
+    const { email, password, username, phoneNumber } = this.state;
+
+    if (!this.isFormValid()) {
+      return;
+    }
+
     try {
       const { status } = await api.createAccount({
         username: email,
@@ -47,9 +75,7 @@ export default class SingIn extends Component {
         alert("회원가입완료");
       }
     } catch (event) {
-      alert(event);
-    } finally {
-      alert("끝");
+      alert("이미 존재하는 이메일입니다.");
     }
   };
 

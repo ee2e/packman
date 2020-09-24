@@ -12,9 +12,10 @@ import {
 import { Text, Button, Input } from "react-native-elements";
 
 import { useDispatch } from "react-redux";
-import { userLogin } from "../../redux/usersSlice";
-
 import { MaterialIcons } from "@expo/vector-icons";
+
+import { userLogin } from "../../redux/usersSlice";
+import utils from "../../utils";
 
 export default function SingIn({ navigation }) {
   const dispatch = useDispatch();
@@ -27,6 +28,18 @@ export default function SingIn({ navigation }) {
 
   const goToFind = () => {
     navigation.navigate("Find");
+  };
+
+  const isFormValid = () => {
+    if (email === "" || password === "") {
+      alert("모든 필드를 채워주세요.");
+      return false;
+    }
+    if (!utils.isEmail(email)) {
+      alert("올바른 이메일이 아닙니다.");
+      return false;
+    }
+    return true;
   };
 
   const doSignIn = () => {
@@ -56,8 +69,6 @@ export default function SingIn({ navigation }) {
             inputStyle={styles.input}
             placeholder="email@address.com"
             keyboardType="email-address"
-            returnKeyType="next"
-            onSubmitEditing={() => this.passwordInput.focus()}
             leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
           />
           <Input
@@ -65,8 +76,6 @@ export default function SingIn({ navigation }) {
             onChangeText={(password) => setPassword(password)}
             containerStyle={styles.inputContainer}
             placeholder="비밀번호"
-            ref={(input) => (this.passwordInput = input)}
-            onSubmitEditing={this.signIn}
             secureTextEntry={true}
             leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
           />
