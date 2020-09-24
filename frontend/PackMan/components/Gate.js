@@ -6,7 +6,7 @@ import Main from "./Main/Main";
 function Gate() {
   return (
     <NavigationContainer>
-      <Main />
+      <Auth />
     </NavigationContainer>
   );
 }

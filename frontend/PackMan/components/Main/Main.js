@@ -8,14 +8,6 @@ import CheckList from "./CheckList";
 import Camera from "./Camera";
 import Settings from "./Settings";
 
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
 const Tab = createMaterialBottomTabNavigator();
 
 export default function Main() {

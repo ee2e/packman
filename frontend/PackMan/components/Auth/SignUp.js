@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -12,84 +12,149 @@ import { Button, Input } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
-export default function SingIn({ navigation }) {
-  const signUp = () => {};
+import api from "../../api";
 
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.inner}>
-          <Image
-            source={require("../../assets/logo.gif")}
-            style={styles.logo}
-          />
-          <Input
-            containerStyle={styles.inputContainer}
-            inputStyle={styles.input}
-            placeholder="email@address.com"
-            keyboardType="email-address"
-            returnKeyType="next"
-            onSubmitEditing={() => this.passwordInput.focus()}
-            leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
-          />
-          <Input
-            containerStyle={styles.inputContainer}
-            placeholder="비밀번호"
-            secureTextEntry={true}
-            returnKeyType="next"
-            ref={(input) => (this.passwordInput = input)}
-            onSubmitEditing={() => this.passwordConfirmInput.focus()}
-            leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
-          />
-          <Input
-            containerStyle={styles.inputContainer}
-            placeholder="비밀번호 확인"
-            secureTextEntry={true}
-            returnKeyType="next"
-            ref={(input) => (this.passwordConfirmInput = input)}
-            onSubmitEditing={() => this.userNameInput.focus()}
-            leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
-          />
-          <Input
-            containerStyle={styles.inputContainer}
-            placeholder="홍길동"
-            returnKeyType="next"
-            ref={(input) => (this.userNameInput = input)}
-            onSubmitEditing={() => this.phoneNumberInput.focus()}
-            leftIcon={<MaterialIcons name="person" size={24} color="#03bcdb" />}
-          />
-          <Input
-            containerStyle={styles.inputContainer}
-            placeholder="0101234567"
-            keyboardType="number-pad"
-            ref={(input) => (this.phoneNumberInput = input)}
-            onSubmitEditing={signUp}
-            leftIcon={
-              <MaterialIcons name="smartphone" size={24} color="#03bcdb" />
-            }
-          />
-          <View style={styles.buttonsContainer}>
-            <Button
-              title="회원가입"
-              buttonStyle={styles.signUpButton}
-              containerStyle={styles.signUpButtonContainer}
-              titleStyle={styles.signUpTitle}
+export default class SingIn extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: "",
+      passwordConfirm: "",
+      username: "",
+      phoneNumber: "",
+    };
+  }
+
+  doSignup = async (event) => {
+    const {
+      email,
+      password,
+      passwordConfirm,
+      username,
+      phoneNumber,
+    } = this.state;
+    try {
+      const { status } = await api.createAccount({
+        username: email,
+        email,
+        password,
+        nickname: username,
+        phone_number: phoneNumber,
+      });
+      if (status === 201) {
+        alert("회원가입완료");
+      }
+    } catch (event) {
+      alert(event);
+    } finally {
+      alert("끝");
+    }
+  };
+
+  render() {
+    const { navigation } = this.props;
+    const {
+      email,
+      password,
+      passwordConfirm,
+      username,
+      phoneNumber,
+    } = this.state;
+    return (
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inner}>
+            <Image
+              source={require("../../assets/logo.gif")}
+              style={styles.logo}
             />
-            <Button
-              title="뒤로"
-              buttonStyle={styles.backButton}
-              containerStyle={styles.backButtonContainer}
-              titleStyle={styles.backTitle}
-              onPress={() => navigation.goBack()}
+            <Input
+              value={email}
+              onChangeText={(email) => this.setState({ email })}
+              containerStyle={styles.inputContainer}
+              inputStyle={styles.input}
+              placeholder="email@address.com"
+              keyboardType="email-address"
+              returnKeyType="next"
+              onSubmitEditing={() => this.passwordInput.focus()}
+              leftIcon={
+                <MaterialIcons name="email" size={24} color="#03bcdb" />
+              }
             />
+            <Input
+              value={password}
+              onChangeText={(password) => this.setState({ password })}
+              containerStyle={styles.inputContainer}
+              placeholder="비밀번호"
+              secureTextEntry={true}
+              returnKeyType="next"
+              ref={(input) => (this.passwordInput = input)}
+              onSubmitEditing={() => this.passwordConfirmInput.focus()}
+              leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
+            />
+            <Input
+              value={passwordConfirm}
+              onChangeText={(passwordConfirm) =>
+                this.setState({ passwordConfirm })
+              }
+              containerStyle={styles.inputContainer}
+              placeholder="비밀번호 확인"
+              secureTextEntry={true}
+              returnKeyType="next"
+              ref={(input) => (this.passwordConfirmInput = input)}
+              onSubmitEditing={() => this.userNameInput.focus()}
+              leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
+            />
+            <Input
+              value={username}
+              onChangeText={(username) => this.setState({ username })}
+              containerStyle={styles.inputContainer}
+              placeholder="홍길동"
+              returnKeyType="next"
+              ref={(input) => (this.userNameInput = input)}
+              onSubmitEditing={() => this.phoneNumberInput.focus()}
+              leftIcon={
+                <MaterialIcons name="person" size={24} color="#03bcdb" />
+              }
+            />
+            <Input
+              value={phoneNumber}
+              onChangeText={(phoneNumber) => this.setState({ phoneNumber })}
+              containerStyle={styles.inputContainer}
+              placeholder="0101234567"
+              keyboardType="number-pad"
+              ref={(input) => (this.phoneNumberInput = input)}
+              onSubmitEditing={this.doSignup}
+              leftIcon={
+                <MaterialIcons name="smartphone" size={24} color="#03bcdb" />
+              }
+            />
+            <View style={styles.buttonsContainer}>
+              <Button
+                title="회원가입"
+                buttonStyle={styles.signUpButton}
+                containerStyle={styles.signUpButtonContainer}
+                titleStyle={styles.signUpTitle}
+                onPress={this.doSignup}
+              />
+              <Button
+                title="뒤로"
+                buttonStyle={styles.backButton}
+                containerStyle={styles.backButtonContainer}
+                titleStyle={styles.backTitle}
+                onPress={() => navigation.goBack()}
+              />
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
-  );
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
