@@ -1,94 +1,3 @@
-// import React from "react";
-
-// import { StyleSheet, View, Text } from "react-native";
-
-// import {
-//   Calendar,
-//   LocaleConfig,
-//   CalendarList,
-//   Agenda,
-// } from "react-native-calendars";
-
-// export default function Calendars() {
-//   LocaleConfig.locales["fr"] = {
-//     monthNames: [
-//       "1월",
-//       "2월",
-//       "3월",
-//       "4월",
-//       "5월",
-//       "6월",
-//       "7월",
-//       "8월",
-//       "9월",
-//       "10월",
-//       "11월",
-//       "12월",
-//     ],
-//     monthNamesShort: [
-//       "1월",
-//       "2월",
-//       "3월",
-//       "4월",
-//       "5월",
-//       "6월",
-//       "7월",
-//       "8월",
-//       "9월",
-//       "10월",
-//       "11월",
-//       "12월",
-//     ],
-//     dayNames: [
-//       "일요일",
-//       "월요일",
-//       "화요일",
-//       "수요일",
-//       "목요일",
-//       "금요일",
-//       "토요일",
-//     ],
-//     dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
-//     today: "오늘",
-//   };
-//   LocaleConfig.defaultLocale = "fr";
-
-//   return (
-//     <View style={styles.inner}>
-//       {/* <Calendar /> */}
-//       <Agenda
-//         items={{
-//           "2020-09-22": [{ text: "item 1 - any js object" }],
-//           "2020-09-23": [{ text: "item 2 - any js object", height: 80 }],
-//           "2020-09-24": [],
-//           "2020-09-25": [
-//             { text: "item 3 - any js object" },
-//             { text: "any js object" },
-//           ],
-//         }}
-//         renderItem={(item, firstItemInDay) => {
-//           return <View />;
-//         }}
-//         renderEmptyData={() => {
-//           return <Text>없다</Text>;
-//         }}
-//       />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//   },
-//   inner: {
-//     flex: 1,
-//     // alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
-
 import React, { Component } from "react";
 import { Alert, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Agenda, LocaleConfig } from "react-native-calendars";
@@ -145,7 +54,18 @@ export default class AgendaScreen extends Component {
 
     this.state = {
       items: {},
+      date: "",
     };
+  }
+
+  componentDidMount() {
+    const year = new Date().getFullYear();
+    const month = new Date().getMonth() + 1;
+    const day = new Date().getDate();
+
+    this.setState({
+      date: year + "-" + month + "-" + day,
+    });
   }
 
   loadItems(day) {
@@ -159,6 +79,7 @@ export default class AgendaScreen extends Component {
           for (let j = 0; j < numItems; j++) {
             this.state.items[strTime].push({
               name: "Item for " + strTime + " #" + j,
+              date: day.year + "년 " + day.month + "월 " + day.day + "일",
               height: Math.max(50, Math.floor(Math.random() * 150)),
             });
           }
@@ -175,11 +96,25 @@ export default class AgendaScreen extends Component {
   }
 
   renderItem(item) {
+    const { navigation } = this.props;
     return (
       <TouchableOpacity
         testID={testIDs.agenda.ITEM}
         style={[styles.item, { height: item.height }]}
-        onPress={() => Alert.alert(item.name)}
+        onPress={() =>
+          Alert.alert(
+            `${item.date}`,
+            "준비물 잘 챙겼는지 사진 한 번 찍어볼까요?",
+            [
+              {
+                text: "취소",
+                style: "cancel",
+              },
+              { text: "확인", onPress: () => navigation.navigate("camera") },
+            ],
+            { cancelable: true }
+          )
+        }
       >
         <Text>{item.name}</Text>
       </TouchableOpacity>
@@ -204,6 +139,8 @@ export default class AgendaScreen extends Component {
   }
 
   render() {
+    const { date } = this.state;
+
     return (
       <>
         <Agenda
@@ -211,7 +148,8 @@ export default class AgendaScreen extends Component {
           testID={testIDs.agenda.CONTAINER}
           items={this.state.items}
           loadItemsForMonth={this.loadItems.bind(this)}
-          selected={"2017-05-16"}
+          selected={date}
+          onDayPress={(day) => console.log(day)}
           renderItem={this.renderItem.bind(this)}
           renderEmptyData={this.renderEmptyData.bind(this)}
           rowHasChanged={this.rowHasChanged.bind(this)}
@@ -225,7 +163,6 @@ export default class AgendaScreen extends Component {
           //    '2017-05-24': {startingDay: true, color: 'gray'},
           //    '2017-05-25': {color: 'gray'},
           //    '2017-05-26': {endingDay: true, color: 'gray'}}}
-          // monthFormat={'yyyy'}
           // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
           //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
           // hideExtraDays={false}
@@ -236,7 +173,7 @@ export default class AgendaScreen extends Component {
           type="font-awesome"
           color="#03bcdb"
           containerStyle={styles.btnContainer}
-          onPress={() => console.log("hello")}
+          onPress={() => alert("click")}
         />
       </>
     );
@@ -258,7 +195,8 @@ const styles = StyleSheet.create({
   emptyDate: {
     height: 15,
     flex: 1,
-    paddingTop: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
   btnContainer: {
     position: "absolute",
