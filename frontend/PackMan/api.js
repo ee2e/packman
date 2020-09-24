@@ -5,7 +5,7 @@ const callApi = async (method, path, data, jwt, params = {}) => {
     Authorization: `Bearer ${jwt}`,
     "Content-Type": "application/json",
   };
-  const baseUrl = "http://127.0.0.1:8000/";
+  const baseUrl = "http://127.0.0.1:8000/api/v1";
   const fullUrl = `${baseUrl}${path}`;
   if (method === "get" || method === "delete") {
     return axios[method](fullUrl, { headers, params });
@@ -15,8 +15,8 @@ const callApi = async (method, path, data, jwt, params = {}) => {
 };
 
 export default {
-  createAccount: (form) => callApi("post", "rest-auth/signup/", form),
-  login: (form) => callApi("post", "rest-auth/", form),
+  createAccount: (form) => callApi("post", "/accounts/", form),
+  login: (form) => callApi("post", "/accounts/login/", form),
   rooms: (page = 1, token) =>
     callApi("get", `/rooms/?page=${page}`, null, token),
   favs: (id, token) => callApi("get", `/users/${id}/favs/`, null, token),

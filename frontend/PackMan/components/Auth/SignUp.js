@@ -37,16 +37,17 @@ export default class SingIn extends Component {
     } = this.state;
     try {
       const { status } = await api.createAccount({
-        id: email,
+        username: email,
+        email,
         password,
-        username: username,
+        nickname: username,
         phone_number: phoneNumber,
       });
       if (status === 201) {
         alert("회원가입완료");
       }
     } catch (event) {
-      alert("이미 있는데?");
+      alert(event);
     } finally {
       alert("끝");
     }
