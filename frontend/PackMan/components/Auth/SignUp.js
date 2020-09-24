@@ -27,7 +27,7 @@ export default class SingIn extends Component {
     };
   }
 
-  doSignup = async (event) => {
+  doSignUp = async (event) => {
     const {
       email,
       password,
@@ -140,7 +140,7 @@ export default class SingIn extends Component {
                 buttonStyle={styles.signUpButton}
                 containerStyle={styles.signUpButtonContainer}
                 titleStyle={styles.signUpTitle}
-                onPress={this.doSignup}
+                onPress={this.doSignUp}
               />
               <Button
                 title="뒤로"

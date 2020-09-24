@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -16,26 +16,20 @@ import { userLogin } from "../../redux/usersSlice";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
-export default class SingIn extends Component {
-  constructor(props) {
-    super(props);
+export default function SingIn({ navigation }) {
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    this.state = {
-      email: "",
-      password: "",
-    };
-  }
-
-  goToSignUp = () => {
-    const { navigation } = this.props;
+  const goToSignUp = () => {
     navigation.navigate("SignUp");
   };
-  goToFind = () => {
-    const { navigation } = this.props;
+
+  const goToFind = () => {
     navigation.navigate("Find");
   };
-  signIn = () => {
-    const { email, password } = this.state;
+
+  const doSignIn = () => {
     dispatch(
       userLogin({
         username: email,
@@ -44,60 +38,56 @@ export default class SingIn extends Component {
     );
   };
 
-  render() {
-    const { email, password } = this.state;
-    return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.inner}>
-            <Image
-              source={require("../../assets/logo.gif")}
-              style={styles.logo}
-            />
-            <Input
-              value={email}
-              onChangeText={(email) => this.setState({ email })}
-              containerStyle={styles.inputContainer}
-              inputStyle={styles.input}
-              placeholder="email@address.com"
-              keyboardType="email-address"
-              returnKeyType="next"
-              onSubmitEditing={() => this.passwordInput.focus()}
-              leftIcon={
-                <MaterialIcons name="email" size={24} color="#03bcdb" />
-              }
-            />
-            <Input
-              value={password}
-              onChangeText={(password) => this.setState({ password })}
-              containerStyle={styles.inputContainer}
-              placeholder="비밀번호"
-              ref={(input) => (this.passwordInput = input)}
-              onSubmitEditing={this.signIn}
-              secureTextEntry={true}
-              leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
-            />
-            <Button
-              title="로그인"
-              buttonStyle={styles.button}
-              containerStyle={styles.buttonContainer}
-              titleStyle={styles.title}
-            />
-            <Image source={require("../../assets/kakao_login.png")} />
-            <TouchableOpacity onPress={this.goToFind}>
-              <Text style={styles.text}>이메일 / 비밀번호 찾기</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToSignUp}>
-              <Text style={styles.text}>회원가입</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    );
-  }
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <Image
+            source={require("../../assets/logo.gif")}
+            style={styles.logo}
+          />
+          <Input
+            value={email}
+            onChangeText={(email) => setEmail(email)}
+            containerStyle={styles.inputContainer}
+            inputStyle={styles.input}
+            placeholder="email@address.com"
+            keyboardType="email-address"
+            returnKeyType="next"
+            onSubmitEditing={() => this.passwordInput.focus()}
+            leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
+          />
+          <Input
+            value={password}
+            onChangeText={(password) => setPassword(password)}
+            containerStyle={styles.inputContainer}
+            placeholder="비밀번호"
+            ref={(input) => (this.passwordInput = input)}
+            onSubmitEditing={this.signIn}
+            secureTextEntry={true}
+            leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
+          />
+          <Button
+            title="로그인"
+            buttonStyle={styles.button}
+            containerStyle={styles.buttonContainer}
+            titleStyle={styles.title}
+            onPress={doSignIn}
+          />
+          <Image source={require("../../assets/kakao_login.png")} />
+          <TouchableOpacity onPress={goToFind}>
+            <Text style={styles.text}>이메일 / 비밀번호 찾기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToSignUp}>
+            <Text style={styles.text}>회원가입</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
 }
 
 const styles = StyleSheet.create({
