@@ -34,7 +34,15 @@ export default class SingIn extends Component {
     const { navigation } = this.props;
     navigation.navigate("Find");
   };
-  signIn = () => {};
+  signIn = () => {
+    const { email, password } = this.state;
+    dispatch(
+      userLogin({
+        username: email,
+        password,
+      })
+    );
+  };
 
   render() {
     const { email, password } = this.state;
