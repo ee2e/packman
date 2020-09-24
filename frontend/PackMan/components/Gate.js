@@ -8,7 +8,8 @@ function Gate() {
   const { isLoggedIn } = useSelector((state) => state.usersReducer);
   return (
     <NavigationContainer>
-      {isLoggedIn ? <Main /> : <Auth />}
+      {/* {isLoggedIn ? <Main /> : <Auth />} */}
+      <Main />
     </NavigationContainer>
   );
 }
