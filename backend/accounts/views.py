@@ -1,22 +1,3 @@
-# import jwt
-# from django.conf import settings
-# from django.contrib.auth import authenticate
-# from django.shortcuts import get_object_or_404
-
-# from rest_framework.decorators import api_view
-# from rest_framework.response import Response
-# from rest_framework.viewsets import ModelViewSet
-
-# from .serializers import UserSerializer
-# from django.contrib.auth import get_user_model
-
-# User = get_user_model()
-
-# class UsersViewSet(ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
-
 import jwt
 from django.conf import settings
 from django.contrib.auth import authenticate

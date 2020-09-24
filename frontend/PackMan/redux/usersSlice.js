@@ -32,7 +32,15 @@ export const userLogin = (form) => async (dispatch) => {
       dispatch(logIn({ token, id }));
     }
   } catch (e) {
-    alert("Wrong user/password");
+    alert("등록 된 정보가 없습니다.");
+  }
+};
+
+export const userLogout = (form) => async (dispatch) => {
+  try {
+    dispatch(logOut());
+  } catch (e) {
+    alert("실패");
   }
 };
 
