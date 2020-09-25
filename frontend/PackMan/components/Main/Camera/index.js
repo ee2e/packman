@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Button } from "react-native";
 import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
@@ -37,6 +37,7 @@ export default function TakePhoto({ navigation }) {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
   return (
     <View style={{ flex: 1 }}>
       <EvilIcons
@@ -47,7 +48,7 @@ export default function TakePhoto({ navigation }) {
         onPress={() => navigation.goBack()}
       />
       <Camera
-        style={{ height: 500 }}
+        style={{ flex: 1 }}
         type={Camera.Constants.Type.back}
         ref={(ref) => {
           setCameraRef(ref);
@@ -56,15 +57,16 @@ export default function TakePhoto({ navigation }) {
         <View
           style={{
             flex: 1,
-            backgroundColor: "transparent",
             flexDirection: "row",
+            backgroundColor: "white",
+            marginTop: 480,
           }}
         >
           <TouchableOpacity
             style={{
               flex: 1,
               alignItems: "center",
-              marginTop: 540,
+              marginTop: 55,
             }}
             onPress={async () => {
               if (cameraRef) {
@@ -108,8 +110,8 @@ export default function TakePhoto({ navigation }) {
                 borderWidth: 2,
                 borderRadius: "50%",
                 borderColor: "#03bcdb",
-                height: 50,
-                width: 50,
+                height: 60,
+                width: 60,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -120,8 +122,8 @@ export default function TakePhoto({ navigation }) {
                   borderWidth: 2,
                   borderRadius: "50%",
                   borderColor: "#03bcdb",
-                  height: 40,
-                  width: 40,
+                  height: 50,
+                  width: 50,
                   backgroundColor: "#03bcdb",
                 }}
               ></View>
