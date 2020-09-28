@@ -117,7 +117,9 @@ export default class CheckList extends Component {
 
           <View>
             <TouchableOpacity onPress={this.showDatePicker}>
-              <Text>{this.state.chosenDate}</Text>
+              <Button 
+                title={this.state.chosenDate}
+              />
             </TouchableOpacity>
             <DateTimePicker
               isVisible={this.state.isVisible}
