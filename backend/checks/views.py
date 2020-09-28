@@ -21,9 +21,9 @@ def check_list(request):
     print(ip)
 
 
-    import urllib.parse
-    import urllib.request
-    from urllib.request import urlopen
+    # import urllib.parse
+    # import urllib.request
+    # from urllib.request import urlopen
     import json
     import requests
     url = 'http://ip-api.com/json'
