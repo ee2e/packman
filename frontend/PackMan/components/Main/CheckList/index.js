@@ -66,13 +66,6 @@ export default class CheckList extends Component {
             onPress={() => navigation.goBack()}
           />
           <Text style={styles.top_text}>일정</Text>
-          <MaterialIcons
-            name="check"
-            size={30}
-            color="black"
-            style={{ marginTop: 30, marginBottom: 10, marginRight: 13 }}
-            onPress={() => navigation.goBack()}
-          />
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
