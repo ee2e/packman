@@ -3,7 +3,6 @@ from urllib.parse import urlencode, unquote, quote_plus
 import urllib
 import requests
 import json
-import pandas as pd
 
 from xml.etree.ElementTree import parse
 

@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'accounts',
     'checks',
 
+    # 'django-ipware',
+
 ]
 
 MIDDLEWARE = [
