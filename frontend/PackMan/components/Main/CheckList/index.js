@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import { Button, Input } from "react-native-elements";
+import moment from 'moment';
 import { 
   View, 
   Text, 
@@ -9,6 +10,8 @@ import {
   KeyboardAvoidingView,
   Keyboard
  } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 export default class CheckList extends Component {
 
@@ -16,8 +19,29 @@ export default class CheckList extends Component {
     super();
     
     this.state = {
-      content: ""
+      content: '',
+      chosenDate: '날짜를 선택해주세요!',
+      isVisible: false
     }
+  }
+
+  handleDatePicker = (datetime) => {
+    this.setState({
+      isVisible: false,
+      chosenDate: moment(datetime).format('YYYY년 M월 DD일')
+    })
+  }
+
+  showDatePicker = () => {
+    this.setState({
+      isVisible: true
+    })
+  }
+
+  hideDatePicker = () => {
+    this.setState({
+      isVisible: false
+    })
   }
 
   isFormValid = () => {
@@ -86,11 +110,21 @@ export default class CheckList extends Component {
                   containerStyle={styles.inputContainer}
                   inputStyle={styles.input}
                   placeholder="일정을 입력하세요."
-                  returnKeyType="next"
                   // onSubmitEditing={() => this.passwordInput.focus()}
                 />
               </View>
           </TouchableWithoutFeedback>
+
+          <View>
+            <TouchableOpacity onPress={this.showDatePicker}>
+              <Text>{this.state.chosenDate}</Text>
+            </TouchableOpacity>
+            <DateTimePicker
+              isVisible={this.state.isVisible}
+              onConfirm={this.handleDatePicker}
+              onCancel={this.hideDatePicker}
+            />
+          </View>
         </KeyboardAvoidingView>
     </View>
     );
@@ -106,7 +140,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   top_text: {
-    marginTop: 30,
+    fontFamily: "BMHANNA",
+    marginTop: 21,
     fontSize: 20
-  }
+  },
+  
 });
