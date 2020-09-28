@@ -75,6 +75,7 @@ export default class SingIn extends Component {
         alert("회원가입완료");
       }
     } catch (event) {
+      console.error(event);
       alert("이미 존재하는 이메일입니다.");
     }
   };
