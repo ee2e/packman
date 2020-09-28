@@ -72,6 +72,7 @@ export default class AgendaScreen extends Component {
     setTimeout(() => {
       for (let i = -15; i < 85; i++) {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+        var _date = new Date(time);
         const strTime = this.timeToString(time);
         if (!this.state.items[strTime]) {
           this.state.items[strTime] = [];
@@ -79,7 +80,7 @@ export default class AgendaScreen extends Component {
           for (let j = 0; j < numItems; j++) {
             this.state.items[strTime].push({
               name: "Item for " + strTime + " #" + j,
-              date: day.year + "년 " + day.month + "월 " + day.day + "일",
+              date: _date.getFullYear() + "년 " + `${_date.getMonth()+1}월 ` + _date.getDate() + "일",
               height: Math.max(50, Math.floor(Math.random() * 150)),
             });
           }
