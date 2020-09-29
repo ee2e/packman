@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Button } from "react-native";
+import { Alert, View, Text, TouchableOpacity } from "react-native";
 import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
@@ -95,13 +95,23 @@ export default function TakePhoto({ navigation }) {
                 // 업로드
                 s3.upload(params, function (err, data) {
                   if (err) {
-                    console.log(err);
+                    // console.log(err);
                     return alert("There was an error uploading your photo");
                   }
-                  alert("Successfully uploaded photo.");
+                  Alert.alert(
+                    "Alert",
+                    "Successfully uploaded photo.",
+                    [
+                      {
+                        text: "확인",
+                        onPress: () => navigation.navigate("calendar"),
+                      },
+                    ],
+                    { cancelable: true }
+                  );
                 });
 
-                console.log(params);
+                // console.log(params);
               }
             }}
           >
