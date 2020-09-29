@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Alert, View, Text, TouchableOpacity } from "react-native";
+import { Alert, View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 var albumBucketName = "pack-man";
 var bucketRegion = "ap-northeast-2";
@@ -59,7 +62,7 @@ export default function TakePhoto({ navigation }) {
             flex: 1,
             flexDirection: "row",
             backgroundColor: "white",
-            marginTop: 480,
+            marginTop: windowHeight - 330,
           }}
         >
           <TouchableOpacity
