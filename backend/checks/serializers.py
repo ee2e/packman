@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Check_list, CheckImage, Stuff
+from .models import Check_list, CheckImage, Stuff, pictureset
 from accounts.serializers import UserSerializer
 
 class CheckImageSerializer(serializers.ModelSerializer):
@@ -32,3 +32,8 @@ class CheckSerializer(serializers.ModelSerializer):
         #     for image_data in images_data.getlist('image'):
         #         CheckImage.objects.create(post=post, image=image_data)
         #     return checklist
+
+class PictureSetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = pictureset
+        fields ='__all__'

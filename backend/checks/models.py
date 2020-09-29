@@ -26,3 +26,7 @@ def upload_path(instance, filename):
 class CheckImage(models.Model):
     checklist = models.ForeignKey(Check_list, on_delete=models.CASCADE)
     # image = models.ImageField(blank=True, null=True, upload_to=upload_path)
+
+class pictureset(models.Model):
+    urlpicture = models.TextField()
+    

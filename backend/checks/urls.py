@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views.check_list),
     path('create/', views.create_check),
     path('list/', views.create_list),
-    path('<int:check_pk>', views.check_detail),
+    path('<int:check_pk>/', views.check_detail),
+    path('picture/', views.getpicture),
 ]
