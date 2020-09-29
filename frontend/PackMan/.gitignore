@@ -1,3 +1,11 @@
+# Expo
+.expo
+__generated__
+web-build
+
+# macOS
+.DS_Store
+
 # Android/IntelliJ
 #
 build/

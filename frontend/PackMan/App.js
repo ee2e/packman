@@ -1,11 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, Clipboard } from "react-native";
 
-import { Text } from "react-native-elements";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+
 import { useFonts } from "@use-expo/font";
 import { AppLoading } from "expo";
 
+import store, { persistor } from "./redux/store";
 import Gate from "./components/Gate";
 
 const bmhannaFonts = {
@@ -19,7 +22,18 @@ export default function App() {
     return <AppLoading />;
   }
 
-  return <Gate />;
+  // HACK: Prevent "Expo pasted from CoreSimulator" notification from spamming continuously
+  if (__DEV__) {
+    Clipboard.setString("");
+  }
+
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Gate />
+      </PersistGate>
+    </Provider>
+  );
 }
 
 const styles = StyleSheet.create({

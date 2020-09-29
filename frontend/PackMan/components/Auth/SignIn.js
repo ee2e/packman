@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -11,12 +11,45 @@ import {
 } from "react-native";
 import { Text, Button, Input } from "react-native-elements";
 
+import { useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import { userLogin } from "../../redux/usersSlice";
+import utils from "../../utils";
+
 export default function SingIn({ navigation }) {
-  const goToSignUp = () => navigation.navigate("SignUp");
-  const goToFind = () => navigation.navigate("Find");
-  const signIn = () => {};
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const goToSignUp = () => {
+    navigation.navigate("SignUp");
+  };
+
+  const goToFind = () => {
+    navigation.navigate("Find");
+  };
+
+  const isFormValid = () => {
+    if (email === "" || password === "") {
+      alert("모든 필드를 채워주세요.");
+      return false;
+    }
+    if (!utils.isEmail(email)) {
+      alert("올바른 이메일이 아닙니다.");
+      return false;
+    }
+    return true;
+  };
+
+  const doSignIn = () => {
+    dispatch(
+      userLogin({
+        username: email,
+        password,
+      })
+    );
+  };
 
   return (
     <KeyboardAvoidingView
@@ -30,19 +63,19 @@ export default function SingIn({ navigation }) {
             style={styles.logo}
           />
           <Input
+            value={email}
+            onChangeText={(email) => setEmail(email)}
             containerStyle={styles.inputContainer}
             inputStyle={styles.input}
             placeholder="email@address.com"
             keyboardType="email-address"
-            returnKeyType="next"
-            onSubmitEditing={() => this.passwordInput.focus()}
             leftIcon={<MaterialIcons name="email" size={24} color="#03bcdb" />}
           />
           <Input
+            value={password}
+            onChangeText={(password) => setPassword(password)}
             containerStyle={styles.inputContainer}
             placeholder="비밀번호"
-            ref={(input) => (this.passwordInput = input)}
-            onSubmitEditing={signIn}
             secureTextEntry={true}
             leftIcon={<MaterialIcons name="lock" size={24} color="#03bcdb" />}
           />
@@ -51,6 +84,7 @@ export default function SingIn({ navigation }) {
             buttonStyle={styles.button}
             containerStyle={styles.buttonContainer}
             titleStyle={styles.title}
+            onPress={doSignIn}
           />
           <Image source={require("../../assets/kakao_login.png")} />
           <TouchableOpacity onPress={goToFind}>
