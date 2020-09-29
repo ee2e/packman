@@ -20,6 +20,7 @@ export default class CheckList extends Component {
     
     this.state = {
       content: '',
+      place: '',
       chosenDate: '날짜를 선택해주세요!',
       isVisible: false
     }
@@ -119,7 +120,7 @@ export default class CheckList extends Component {
             </View>
 
             <TextInput
-              style={styles.input}
+              style={styles.input_content}
               value={content}
               onChangeText={(content) => this.setState({ content })}
               placeholder="일정을 입력하세요."
@@ -138,6 +139,14 @@ export default class CheckList extends Component {
               isVisible={this.state.isVisible}
               onConfirm={this.handleDatePicker}
               onCancel={this.hideDatePicker}
+            />
+            <TextInput
+              style={styles.input_place}
+              value={content}
+              onChangeText={(content) => this.setState({ content })}
+              placeholder="일정을 입력하세요."
+              multiline={true}
+              onEndmitEditing={Keyboard.dismiss}
             />
           </View>
         </TouchableWithoutFeedback>
@@ -159,7 +168,7 @@ const styles = StyleSheet.create({
     marginTop: 35,
     fontSize: 20
   },
-  input: {
+  input_content: {
     fontFamily: "BMHANNA",
     justifyContent: 'center', 
     alignItems: 'center', 
@@ -176,11 +185,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 50,
-    marginRight: 50
+    marginRight: 50,
+    marginBottom: 20
   },
   date_text: {
     fontFamily: "BMHANNA",
     fontSize: 20,
+  },
+  input_place: {
+    fontFamily: "BMHANNA",
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 20,
+    height: 70,
+    fontSize: 20
   }
   
 });
