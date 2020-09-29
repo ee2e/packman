@@ -24,7 +24,8 @@ export default class CheckList extends Component {
       place: '',
       chosenDate: '날짜를 선택해주세요!',
       isVisible: false,
-      location: null
+      location: null,
+      GOOGLE_PLACES_API_KEY: 'AIzaSyArYM2tY8P0JfCqG4IAgFXBHEKo7OsfZZg'
     }
   }
 
@@ -94,7 +95,8 @@ export default class CheckList extends Component {
     const { navigation } = this.props;
     const {
       content,
-      place
+      place,
+      GOOGLE_PLACES_API_KEY
     } = this.state;
     return (
       <KeyboardAvoidingView
@@ -150,7 +152,7 @@ export default class CheckList extends Component {
             />
 
             {/* 장소 선택 */}
-            <View style={styles.view_place}>
+            {/* <View style={styles.view_place}>
               <EvilIcons style={styles.icon_place} name="location" size={40} color="#03bcdb" />
               <TextInput
                 style={styles.input_place}
@@ -158,7 +160,37 @@ export default class CheckList extends Component {
                 onChangeText={(place) => this.setState({ place })}
                 placeholder="장소"
               />
-            </View>
+            </View> */}
+            <GooglePlacesAutocomplete
+        query={{
+          key: GOOGLE_PLACES_API_KEY,
+          language: 'en', // language of the results
+        }}
+        onPress={(data, details = null) => console.log(data)}
+        onFail={(error) => console.error(error)}
+        requestUrl={{
+          url:
+            'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api',
+          useOnPlatform: 'web',
+        }} // this in only required for use on the web. See https://git.io/JflFv more for details.
+        styles={{
+          textInputContainer: {
+            backgroundColor: 'rgba(0,0,0,0)',
+            borderTopWidth: 0,
+            borderBottomWidth: 0,
+          },
+          textInput: {
+            marginLeft: 0,
+            marginRight: 0,
+            height: 38,
+            color: '#5d5d5d',
+            fontSize: 16,
+          },
+          predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+        }}
+      />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -186,6 +218,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     marginTop: 20,
+    margin: 20,
     height: 70,
     fontSize: 20
   },
