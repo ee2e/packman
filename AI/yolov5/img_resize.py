@@ -4,10 +4,10 @@ import cv2
 import glob
 import os
 
-class_name = "socks"
-path = glob.glob("./dataset/" + class_name + "/images/*.jpg")
+class_name = "hair_dryer"
+path = glob.glob("./dataset/" + class_name + "/*.jpg")
 
-save_path = "./dataset/" + class_name + "/resize/"
+save_path = "./dataset/" + class_name + "/images/"
 
 if not os.path.isdir(save_path):
     os.mkdir(save_path)
