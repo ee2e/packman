@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import moment from 'moment';
 import { 
   View, 
@@ -12,6 +12,7 @@ import {
  } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePicker from "react-native-modal-datetime-picker";
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default class CheckList extends Component {
 
@@ -20,8 +21,11 @@ export default class CheckList extends Component {
     
     this.state = {
       content: '',
+      place: '',
       chosenDate: '날짜를 선택해주세요!',
-      isVisible: false
+      isVisible: false,
+      location: null,
+      GOOGLE_PLACES_API_KEY: 'AIzaSyArYM2tY8P0JfCqG4IAgFXBHEKo7OsfZZg'
     }
   }
 
@@ -54,6 +58,8 @@ export default class CheckList extends Component {
       isVisible: false
     })
   }
+
+  // 장소 선택
 
   // 일정 입력 여부 확인
   isFormValid = () => {
@@ -88,7 +94,9 @@ export default class CheckList extends Component {
   render(){
     const { navigation } = this.props;
     const {
-      content
+      content,
+      place,
+      GOOGLE_PLACES_API_KEY
     } = this.state;
     return (
       <KeyboardAvoidingView
@@ -118,14 +126,17 @@ export default class CheckList extends Component {
               />
             </View>
 
+            {/* 일정 입력 */}
             <TextInput
-              style={styles.input}
+              style={styles.input_content}
               value={content}
               onChangeText={(content) => this.setState({ content })}
               placeholder="일정을 입력하세요."
               multiline={true}
               onEndmitEditing={Keyboard.dismiss}
             />
+
+            {/* 날짜 선택 */}
             <TouchableOpacity 
               style={styles.date_button}
               onPress={this.showDatePicker}
@@ -139,6 +150,47 @@ export default class CheckList extends Component {
               onConfirm={this.handleDatePicker}
               onCancel={this.hideDatePicker}
             />
+
+            {/* 장소 선택 */}
+            {/* <View style={styles.view_place}>
+              <EvilIcons style={styles.icon_place} name="location" size={40} color="#03bcdb" />
+              <TextInput
+                style={styles.input_place}
+                value={place}
+                onChangeText={(place) => this.setState({ place })}
+                placeholder="장소"
+              />
+            </View> */}
+            <GooglePlacesAutocomplete
+        query={{
+          key: GOOGLE_PLACES_API_KEY,
+          language: 'en', // language of the results
+        }}
+        onPress={(data, details = null) => console.log(data)}
+        onFail={(error) => console.error(error)}
+        requestUrl={{
+          url:
+            'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api',
+          useOnPlatform: 'web',
+        }} // this in only required for use on the web. See https://git.io/JflFv more for details.
+        styles={{
+          textInputContainer: {
+            backgroundColor: 'rgba(0,0,0,0)',
+            borderTopWidth: 0,
+            borderBottomWidth: 0,
+          },
+          textInput: {
+            marginLeft: 0,
+            marginRight: 0,
+            height: 38,
+            color: '#5d5d5d',
+            fontSize: 16,
+          },
+          predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+        }}
+      />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -159,13 +211,14 @@ const styles = StyleSheet.create({
     marginTop: 35,
     fontSize: 20
   },
-  input: {
+  input_content: {
     fontFamily: "BMHANNA",
     justifyContent: 'center', 
     alignItems: 'center', 
     marginLeft: 20,
     marginRight: 20,
     marginTop: 20,
+    margin: 20,
     height: 70,
     fontSize: 20
   },
@@ -176,11 +229,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 50,
-    marginRight: 50
+    marginRight: 50,
+    marginBottom: 20
   },
   date_text: {
     fontFamily: "BMHANNA",
     fontSize: 20,
+  },
+  view_place: {
+    flexDirection: 'row',
+  },
+  input_place: {
+    fontFamily: "BMHANNA",
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginLeft: 10,
+    marginRight: 20,
+    height: 70,
+    fontSize: 20
+  },
+  icon_place: {
+    marginLeft: 20,
+    marginTop: 20
   }
   
 });
