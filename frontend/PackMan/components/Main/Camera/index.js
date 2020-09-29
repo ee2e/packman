@@ -47,7 +47,7 @@ export default function TakePhoto({ navigation }) {
         name="close"
         size={30}
         color="black"
-        style={{ marginTop: 50, marginBottom: 10, marginLeft: 10 }}
+        style={{ marginTop: 40, marginBottom: 10, marginLeft: 10 }}
         onPress={() => navigation.goBack()}
       />
       <Camera
@@ -62,7 +62,7 @@ export default function TakePhoto({ navigation }) {
             flex: 1,
             flexDirection: "row",
             backgroundColor: "white",
-            marginTop: windowHeight - 330,
+            marginTop: windowHeight - 320,
           }}
         >
           <TouchableOpacity
