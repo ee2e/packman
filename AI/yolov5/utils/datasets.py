@@ -143,6 +143,8 @@ class LoadImages:  # for inference
         if self.count == self.nf:
             raise StopIteration
         path = self.files[self.count]
+        print("!!!! : " + path)
+
 
         if self.video_flag[self.count]:
             # Read video
