@@ -4,8 +4,8 @@ import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const screenWidth = Dimensions.get("screen").width;
+const screenHeight = Dimensions.get("screen").height;
 
 var albumBucketName = "pack-man";
 var bucketRegion = "ap-northeast-2";
@@ -62,7 +62,7 @@ export default function TakePhoto({ navigation }) {
             flex: 1,
             flexDirection: "row",
             backgroundColor: "white",
-            marginTop: windowHeight - 320,
+            marginTop: screenHeight - 320,
           }}
         >
           <TouchableOpacity

@@ -5,7 +5,7 @@ import { Icon } from "react-native-elements";
 
 const testIDs = require("../testIDs");
 
-LocaleConfig.locales["fr"] = {
+LocaleConfig.locales["ko"] = {
   monthNames: [
     "1월",
     "2월",
@@ -46,7 +46,7 @@ LocaleConfig.locales["fr"] = {
   dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
   today: "오늘",
 };
-LocaleConfig.defaultLocale = "fr";
+LocaleConfig.defaultLocale = "ko";
 
 export default class AgendaScreen extends Component {
   constructor(props) {
@@ -55,6 +55,7 @@ export default class AgendaScreen extends Component {
     this.state = {
       items: {},
       date: "",
+      title: "",
     };
   }
 
@@ -64,8 +65,10 @@ export default class AgendaScreen extends Component {
     const day = new Date().getDate();
 
     this.setState({
-      date: year + "-" + month + "-" + day,
+      title: year + "년 " + month + "월",
     });
+
+    console.log(this.date);
   }
 
   loadItems(day) {
@@ -80,7 +83,12 @@ export default class AgendaScreen extends Component {
           for (let j = 0; j < numItems; j++) {
             this.state.items[strTime].push({
               name: "Item for " + strTime + " #" + j,
-              date: _date.getFullYear() + "년 " + `${_date.getMonth()+1}월 ` + _date.getDate() + "일",
+              date:
+                _date.getFullYear() +
+                "년 " +
+                `${_date.getMonth() + 1}월 ` +
+                _date.getDate() +
+                "일",
               height: Math.max(50, Math.floor(Math.random() * 150)),
             });
           }
@@ -144,13 +152,20 @@ export default class AgendaScreen extends Component {
 
     return (
       <>
+        <View style={styles.date}>
+          <Text style={styles.dateText}>{this.state.title}</Text>
+        </View>
         <Agenda
           style={styles.agendaContainer}
           testID={testIDs.agenda.CONTAINER}
           items={this.state.items}
           loadItemsForMonth={this.loadItems.bind(this)}
-          selected={date}
-          onDayPress={(day) => console.log(day)}
+          onDayPress={(day) =>
+            this.setState({
+              title: day.year + "년 " + day.month + "월",
+              date: day.year + "-" + day.month + "-" + day.day,
+            })
+          }
           renderItem={this.renderItem.bind(this)}
           renderEmptyData={this.renderEmptyData.bind(this)}
           rowHasChanged={this.rowHasChanged.bind(this)}
@@ -167,7 +182,7 @@ export default class AgendaScreen extends Component {
           // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
           //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
           // hideExtraDays={false}
-        />
+        ></Agenda>
         <Icon
           reverse
           name="plus"
@@ -182,9 +197,18 @@ export default class AgendaScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  agendaContainer: {
+  date: {
     marginTop: 40,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
   },
+  dateText: {
+    fontFamily: "BMHANNA",
+    fontSize: 25,
+    marginTop: 12,
+  },
+  agendaContainer: {},
   item: {
     backgroundColor: "white",
     flex: 1,
