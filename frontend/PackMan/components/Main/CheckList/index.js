@@ -1,74 +1,80 @@
 import React, { Component } from "react";
-import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
-import moment from 'moment';
-import { 
-  View, 
-  Text, 
+import { MaterialIcons } from "@expo/vector-icons";
+import moment from "moment";
+import {
+  View,
+  Text,
   StyleSheet,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Keyboard,
-  TextInput
- } from "react-native";
+  TextInput,
+  Dimensions,
+} from "react-native";
+import { ListItem, Input } from "react-native-elements";
+import { Octicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePicker from "react-native-modal-datetime-picker";
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+
+const screenWidth = Dimensions.get("screen").width;
+const screenHeight = Dimensions.get("screen").height;
 
 export default class CheckList extends Component {
-
-  constructor(props){
+  constructor(props) {
     super();
-    
+
     this.state = {
-      content: '',
-      place: '',
-      chosenDate: '날짜를 선택해주세요!',
+      content: "",
+      place: "",
+      chosenDate: "날짜를 선택해주세요!",
       isVisible: false,
       location: null,
-      GOOGLE_PLACES_API_KEY: 'AIzaSyArYM2tY8P0JfCqG4IAgFXBHEKo7OsfZZg'
-    }
+      GOOGLE_PLACES_API_KEY: "AIzaSyArYM2tY8P0JfCqG4IAgFXBHEKo7OsfZZg",
+      supplies: [
+        { id: 1, name: "폼클렌징" },
+        { id: 2, name: "머리끈" },
+      ],
+      supply: "",
+    };
   }
 
   // 컴포넌트 이동 시 일정, 날짜 초기화
   reset = () => {
     this.setState({
-      content: '',
-      chosenDate: '날짜를 선택해주세요!'
-    })
-  }
+      content: "",
+      chosenDate: "날짜를 선택해주세요!",
+    });
+  };
 
   // 날짜 선택
   handleDatePicker = (datetime) => {
     this.setState({
       isVisible: false,
-      chosenDate: moment(datetime).format('YYYY년 M월 DD일')
-    })
-  }
+      chosenDate: moment(datetime).format("YYYY년 M월 DD일"),
+    });
+  };
 
   // 날짜 선택창 보여주기
   showDatePicker = () => {
     this.setState({
-      isVisible: true
-    })
-  }
+      isVisible: true,
+    });
+  };
 
   // 날짜 선택창 숨기기
   hideDatePicker = () => {
     this.setState({
-      isVisible: false
-    })
-  }
+      isVisible: false,
+    });
+  };
 
   // 장소 선택
 
   // 일정 입력 여부 확인
   isFormValid = () => {
-    const {
-      content
-    } = this.state;
-    if (
-      content === "" 
-    ) {
+    const { content } = this.state;
+    if (content === "") {
       alert("일정을 입력해주세요.");
       return false;
     }
@@ -91,20 +97,31 @@ export default class CheckList extends Component {
     }
   };
 
-  render(){
+  // 준비물 삭제
+  supplyRemove = (id) => {
+    const { supplies } = this.state;
+    this.setState({
+      supplies: supplies.filter((supply) => supply.id !== id),
+    });
+  };
+
+  render() {
     const { navigation } = this.props;
     const {
       content,
       place,
-      GOOGLE_PLACES_API_KEY
+      GOOGLE_PLACES_API_KEY,
+      supplies,
+      supply,
     } = this.state;
+
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
+          <View>
             <View style={styles.top}>
               <MaterialIcons
                 name="close"
@@ -112,8 +129,8 @@ export default class CheckList extends Component {
                 color="black"
                 style={{ marginTop: 30, marginBottom: 10, marginLeft: 13 }}
                 onPress={() => {
-                  this.reset()
-                  navigation.goBack()
+                  this.reset();
+                  navigation.goBack();
                 }}
               />
               <Text style={styles.top_text}>일정</Text>
@@ -137,18 +154,20 @@ export default class CheckList extends Component {
             />
 
             {/* 날짜 선택 */}
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.date_button}
               onPress={this.showDatePicker}
             >
-              <Text
-                style={styles.date_text}
-              > {this.state.chosenDate} </Text>
+              <Text style={styles.date_text}> {this.state.chosenDate} </Text>
             </TouchableOpacity>
             <DateTimePicker
               isVisible={this.state.isVisible}
               onConfirm={this.handleDatePicker}
               onCancel={this.hideDatePicker}
+              cancelTextIOS="취소"
+              confirmTextIOS="확인"
+              headerTextIOS="여행 날짜"
+              locale="ko-KR"
             />
 
             {/* 장소 선택 */}
@@ -161,36 +180,82 @@ export default class CheckList extends Component {
                 placeholder="장소"
               />
             </View> */}
-            <GooglePlacesAutocomplete
-        query={{
-          key: GOOGLE_PLACES_API_KEY,
-          language: 'en', // language of the results
-        }}
-        onPress={(data, details = null) => console.log(data)}
-        onFail={(error) => console.error(error)}
-        requestUrl={{
-          url:
-            'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api',
-          useOnPlatform: 'web',
-        }} // this in only required for use on the web. See https://git.io/JflFv more for details.
-        styles={{
-          textInputContainer: {
-            backgroundColor: 'rgba(0,0,0,0)',
-            borderTopWidth: 0,
-            borderBottomWidth: 0,
-          },
-          textInput: {
-            marginLeft: 0,
-            marginRight: 0,
-            height: 38,
-            color: '#5d5d5d',
-            fontSize: 16,
-          },
-          predefinedPlacesDescription: {
-            color: '#1faadb',
-          },
-        }}
-      />
+            {/* <GooglePlacesAutocomplete
+              query={{
+                key: GOOGLE_PLACES_API_KEY,
+                language: "en", // language of the results
+              }}
+              onPress={(data, details = null) => console.log(data)}
+              onFail={(error) => console.error(error)}
+              requestUrl={{
+                url:
+                  "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
+                useOnPlatform: "web",
+              }} // this in only required for use on the web. See https://git.io/JflFv more for details.
+              styles={{
+                textInputContainer: {
+                  backgroundColor: "rgba(0,0,0,0)",
+                  borderTopWidth: 0,
+                  borderBottomWidth: 0,
+                },
+                textInput: {
+                  marginLeft: 0,
+                  marginRight: 0,
+                  height: 38,
+                  color: "#5d5d5d",
+                  fontSize: 16,
+                },
+                predefinedPlacesDescription: {
+                  color: "#1faadb",
+                },
+              }}
+            /> */}
+            <View
+              style={{
+                borderBottomColor: "#BDBDBD",
+                borderBottomWidth: 1,
+                marginTop: 20,
+              }}
+            />
+            <View>
+              {supplies.map((supply) => (
+                <ListItem key={supply.id} bottomDivider>
+                  <ListItem.Content>
+                    <ListItem.Title>{supply.name}</ListItem.Title>
+                  </ListItem.Content>
+                  <TouchableOpacity
+                    onPress={() => this.supplyRemove(supply.id)}
+                  >
+                    <ListItem.Chevron name="close" type="evilicon" />
+                  </TouchableOpacity>
+                </ListItem>
+              ))}
+              <Input
+                containerStyle={{
+                  backgroundColor: "white",
+                  width: screenWidth,
+                  height: 47,
+                }}
+                placeholder="준비물을 입력하세요."
+                value={supply}
+                onChangeText={(value) => this.setState({ supply: value })}
+                rightIcon={
+                  <Octicons
+                    name="plus"
+                    size={24}
+                    color="black"
+                    onPress={() =>
+                      this.setState({
+                        supplies: supplies.concat({
+                          name: supply,
+                        }),
+                        supply: "",
+                      })
+                    }
+                  />
+                }
+              />
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -200,57 +265,53 @@ export default class CheckList extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 15,
   },
   top: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   top_text: {
     fontFamily: "BMHANNA",
     marginTop: 35,
-    fontSize: 20
+    fontSize: 20,
   },
   input_content: {
     fontFamily: "BMHANNA",
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    justifyContent: "center",
+    alignItems: "center",
     marginLeft: 20,
     marginRight: 20,
     marginTop: 20,
-    margin: 20,
-    height: 70,
-    fontSize: 20
+    height: 50,
+    fontSize: 20,
   },
   date_button: {
     height: 50,
-    backgroundColor: '#ffe14b',
+    backgroundColor: "#ffe14b",
     fontSize: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 50,
-    marginRight: 50,
-    marginBottom: 20
+    justifyContent: "center",
+    alignItems: "center",
   },
   date_text: {
     fontFamily: "BMHANNA",
     fontSize: 20,
   },
   view_place: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   input_place: {
     fontFamily: "BMHANNA",
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    justifyContent: "center",
+    alignItems: "center",
     marginLeft: 10,
     marginRight: 20,
-    height: 70,
-    fontSize: 20
+    height: 50,
+    fontSize: 20,
   },
   icon_place: {
     marginLeft: 20,
-    marginTop: 20
-  }
-  
+    marginTop: 20,
+  },
 });
