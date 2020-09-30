@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Check_list
+from .models import Supplies, Stuff
 
 # Register your models here.
-admin.site.register(Check_list)
+admin.site.register(Supplies)
+admin.site.register(Stuff)

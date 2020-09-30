@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # My Apps
     'accounts',
     'checks',
+    'utilities',
 
 ]
 
