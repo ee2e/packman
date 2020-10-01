@@ -20,9 +20,10 @@ def detect(request):
     print(url)
     start = str(int(time.time()))
     print(start)
-    stroge = "> ../AI/yolov5/inference/images/" + start + ".jpg"
-    print(stroge)
-    os.system("curl " + url + stroge)
+    storage = "> ../AI/yolov5/inference/images/" + start + ".jpg"
+    print(storage)
+    os.system("curl " + url + storage)
+    os.system("python ../AI/yolov5/detect.py")
 
     # os.system("curl " + url + " > ../AI/yolov5/inference/images/a.jpg")
     return HttpResponse("OK")
