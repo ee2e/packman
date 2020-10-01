@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import {
   View,
@@ -16,6 +16,7 @@ import { Octicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import key from '../../../api';
 
 const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
@@ -30,7 +31,7 @@ export default class CheckList extends Component {
       chosenDate: "날짜를 선택해주세요!",
       isVisible: false,
       location: null,
-      GOOGLE_PLACES_API_KEY: "AIzaSyArYM2tY8P0JfCqG4IAgFXBHEKo7OsfZZg",
+      GOOGLE_PLACES_API_KEY: key.GOOGLE_PLACES_API_KEY,
       supplies: [
         { id: 1, name: "폼클렌징" },
         { id: 2, name: "머리끈" },
@@ -171,45 +172,43 @@ export default class CheckList extends Component {
             />
 
             {/* 장소 선택 */}
-            {/* <View style={styles.view_place}>
+            <View style={styles.view_place}>
               <EvilIcons style={styles.icon_place} name="location" size={40} color="#03bcdb" />
-              <TextInput
-                style={styles.input_place}
-                value={place}
-                onChangeText={(place) => this.setState({ place })}
-                placeholder="장소"
+              <GooglePlacesAutocomplete
+                query={{
+                  key: GOOGLE_PLACES_API_KEY,
+                  language: 'ko',
+                }}
+                onPress={(data, details = null) => this.setState({ place })}
+                onFail={(error) => console.error(error)}
+                requestUrl={{
+                  url:
+                    'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api',
+                  useOnPlatform: 'web',
+                }}
+                placeholder= '장소'
+                styles={{
+                  container: {
+                    marginTop: 15,
+                    marginRight: 20
+                  },
+                  textInputContainer: {
+                    backgroundColor: '#f2f2f2',
+                    borderBottomWidth: 0,
+                    borderTopWidth: 0
+                  },
+                  textInput: {
+                    marginLeft: 0,
+                    marginRight: 0,
+                    backgroundColor: '#f2f2f2',
+                    fontFamily: 'BMHANNA',
+                    fontSize: 18
+                  }
+                }}
               />
-            </View> */}
-            {/* <GooglePlacesAutocomplete
-              query={{
-                key: GOOGLE_PLACES_API_KEY,
-                language: "en", // language of the results
-              }}
-              onPress={(data, details = null) => console.log(data)}
-              onFail={(error) => console.error(error)}
-              requestUrl={{
-                url:
-                  "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
-                useOnPlatform: "web",
-              }} // this in only required for use on the web. See https://git.io/JflFv more for details.
-              styles={{
-                textInputContainer: {
-                  backgroundColor: "rgba(0,0,0,0)",
-                  borderTopWidth: 0,
-                  borderBottomWidth: 0,
-                },
-                textInput: {
-                  marginLeft: 0,
-                  marginRight: 0,
-                  height: 38,
-                  color: "#5d5d5d",
-                  fontSize: 16,
-                },
-                predefinedPlacesDescription: {
-                  color: "#1faadb",
-                },
-              }}
-            /> */}
+            </View>
+
+            {/* 준비물 입력 */}
             <View
               style={{
                 borderBottomColor: "#BDBDBD",
@@ -300,15 +299,6 @@ const styles = StyleSheet.create({
   },
   view_place: {
     flexDirection: "row",
-  },
-  input_place: {
-    fontFamily: "BMHANNA",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 10,
-    marginRight: 20,
-    height: 50,
-    fontSize: 20,
   },
   icon_place: {
     marginLeft: 20,
