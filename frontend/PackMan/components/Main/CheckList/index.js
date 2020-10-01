@@ -10,6 +10,7 @@ import {
   Keyboard,
   TextInput,
   Dimensions,
+  ScrollView
 } from "react-native";
 import { ListItem, Input } from "react-native-elements";
 import { Octicons } from "@expo/vector-icons";
@@ -69,8 +70,6 @@ export default class CheckList extends Component {
       isVisible: false,
     });
   };
-
-  // 장소 선택
 
   // 일정 입력 여부 확인
   isFormValid = () => {
@@ -198,7 +197,7 @@ export default class CheckList extends Component {
                     borderTopWidth: 0
                   },
                   textInput: {
-                    marginLeft: 0,
+                    marginLeft: 14,
                     marginRight: 0,
                     backgroundColor: '#f2f2f2',
                     fontFamily: 'BMHANNA',
@@ -209,51 +208,64 @@ export default class CheckList extends Component {
             </View>
 
             {/* 준비물 입력 */}
-            <View
-              style={{
-                borderBottomColor: "#BDBDBD",
-                borderBottomWidth: 1,
-                marginTop: 20,
-              }}
-            />
-            <View>
-              {supplies.map((supply) => (
-                <ListItem key={supply.id} bottomDivider>
-                  <ListItem.Content>
-                    <ListItem.Title>{supply.name}</ListItem.Title>
-                  </ListItem.Content>
-                  <TouchableOpacity
-                    onPress={() => this.supplyRemove(supply.id)}
-                  >
-                    <ListItem.Chevron name="close" type="evilicon" />
-                  </TouchableOpacity>
-                </ListItem>
-              ))}
-              <Input
-                containerStyle={{
-                  backgroundColor: "white",
-                  width: screenWidth,
-                  height: 47,
+            <View style={styles.view_place}>
+              <EvilIcons style={styles.icon_place} name="archive" size={40} color="#03bcdb" />
+              <View
+                style={{
+                  borderBottomColor: "#BDBDBD",
+                  borderBottomWidth: 1,
+                  marginTop: 20,
                 }}
-                placeholder="준비물을 입력하세요."
-                value={supply}
-                onChangeText={(value) => this.setState({ supply: value })}
-                rightIcon={
-                  <Octicons
-                    name="plus"
-                    size={24}
-                    color="black"
-                    onPress={() =>
-                      this.setState({
-                        supplies: supplies.concat({
-                          name: supply,
-                        }),
-                        supply: "",
-                      })
-                    }
-                  />
-                }
               />
+              
+              <View style={styles.container_list}>
+                {supplies.map((supply) => (
+                  <ListItem key={supply.id} bottomDivider
+                    containerStyle={{
+                      width: 280,
+                      height: 47,
+                      backgroundColor: '#f2f2f2',
+                      fontFamily: 'BMHANNA'
+                    }}
+                  >
+                    <ListItem.Content>
+                      <ListItem.Title style={styles.input_list}>{supply.name}</ListItem.Title>
+                    </ListItem.Content>
+                    <TouchableOpacity
+                      onPress={() => this.supplyRemove(supply.id)}
+                    >
+                      <ListItem.Chevron name="close" type="evilicon" />
+                    </TouchableOpacity>
+                  </ListItem>
+                ))}
+                <Input
+                  containerStyle={{
+                    width: 280,
+                    height: 47,
+                    backgroundColor: '#f2f2f2',
+                    marginLeft: 0
+                  }}
+                  style={styles.input_stuff}
+                  placeholder="준비물을 입력하세요."
+                  value={supply}
+                  onChangeText={(value) => this.setState({ supply: value })}
+                  rightIcon={
+                    <Octicons
+                      name="plus"
+                      size={24}
+                      color="black"
+                      onPress={() =>
+                        this.setState({
+                          supplies: supplies.concat({
+                            name: supply,
+                          }),
+                          supply: "",
+                        })
+                      }
+                    />
+                  }
+                />
+              </View>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -304,4 +316,18 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 20,
   },
+  container_list: {
+    marginTop: 13,
+    marginLeft: 10,
+    marginRight: 50,
+    backgroundColor: '#f2f2f2'
+  },
+  input_list: {
+    fontFamily: 'BMHANNA',
+    fontSize: 18
+  },
+  input_stuff: {
+    fontFamily: 'BMHANNA',
+    marginLeft: 5
+  }
 });
