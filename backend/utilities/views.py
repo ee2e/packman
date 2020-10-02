@@ -30,3 +30,8 @@ def detect(request):
 
     # C:\Users\multicampus\Desktop\ach\s03p23d208\AI\yolov5\inference\images
     # AI\yolov5\inference\images
+
+# def travelweather(request):
+
+
+# def nowweather(request):
