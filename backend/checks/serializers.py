@@ -2,6 +2,19 @@ from rest_framework import serializers
 from .models import Supplies, Stuff
 from accounts.serializers import UserSerializer
 
+class StuffSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = Stuff
+        fields = '__all__'
+
+class SuppliesSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
+    stuffs = StuffSerializer(many=True)
+    class Meta:
+        model = Supplies
+        fields = '__all__'
+
 # class CheckImageSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = CheckImage

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import api from "../api";
-import { setFavs, setFav } from "./roomsSlice";
+import { setFavs, setFav } from "./checksSlice";
 
 const userSlice = createSlice({
   name: "users",
@@ -31,6 +31,7 @@ export const userLogin = (form) => async (dispatch) => {
     if (id && token) {
       dispatch(logIn({ token, id }));
     }
+    console.log(token);
   } catch (e) {
     alert("등록 된 정보가 없습니다.");
   }
@@ -56,13 +57,13 @@ export const getFavs = () => async (dispatch, getState) => {
   }
 };
 
-export const toggleFav = (roomId) => async (dispatch, getState) => {
+export const toggleFav = (checkId) => async (dispatch, getState) => {
   const {
     usersReducer: { id, token },
   } = getState();
-  dispatch(setFav({ roomId }));
+  dispatch(setFav({ checkId }));
   try {
-    await api.toggleFavs(id, roomId, token);
+    await api.toggleFavs(id, checkId, token);
   } catch (e) {
     console.warn(e);
   }
