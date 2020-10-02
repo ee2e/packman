@@ -3,6 +3,7 @@ from django.conf import settings
 
 class Stuff(models.Model):
     name = models.CharField(max_length=20)
+    check = models.BooleanField()
 
 class Supplies(models.Model):
     content = models.CharField(max_length=100)
