@@ -81,7 +81,7 @@ export default function CheckList({ navigation }) {
         createCheckList({
           content,
           stuffs,
-          data: chosenDate,
+          date: chosenDate,
           place: "대구",
         })
       );
