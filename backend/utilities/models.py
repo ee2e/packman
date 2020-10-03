@@ -4,7 +4,7 @@ from checks.models import Supplies, Stuff
 
 class Date(models.Model):
     number = models.IntegerField()
-    weather = models.CharField(max_length=20)
+    weather = models.CharField(max_length=20, blank=True)
 
 class Place(models.Model):
     name = models.CharField(max_length=30)

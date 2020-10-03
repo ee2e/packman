@@ -3,7 +3,6 @@ from .models import Supplies, Stuff
 from accounts.serializers import UserSerializer
 
 class StuffSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
     class Meta:
         model = Stuff
         fields = '__all__'
@@ -14,6 +13,7 @@ class SuppliesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Supplies
         fields = '__all__'
+        read_only_fields = ('id', 'user', 'created_at', 'updated_at')
 
 # class CheckImageSerializer(serializers.ModelSerializer):
 #     class Meta:
