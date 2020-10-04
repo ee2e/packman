@@ -61,7 +61,7 @@ class CheckViewSet(ModelViewSet):
     serializer_class = UserSerializer
 
     def get_permissions(self):
-        if self.action == "list" or self.action == "retrieve":
+        if self.action == "list" or self.action == "retrieve" or self.action == "search":
             permission_classes = [permissions.AllowAny]
         elif self.action == "new":
             permission_classes = [permissions.IsAuthenticated]
@@ -112,3 +112,9 @@ class CheckViewSet(ModelViewSet):
         serializer = SuppliesSerializer(supplies)
 
         return Response(serializer.data)
+
+
+    # 준비물 검색
+    @action(detail=True, methods=["post"])
+    def search(self, request, pk):
+        pass

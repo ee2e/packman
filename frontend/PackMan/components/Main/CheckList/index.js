@@ -17,7 +17,7 @@ import { Octicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import key from "../../../api";
+import api from "../../../api";
 import { useDispatch } from "react-redux";
 import { createCheckList } from "../../../redux/checksSlice";
 
@@ -28,6 +28,7 @@ export default function CheckList({ navigation }) {
   const [content, setContent] = useState("");
   const [place, setPlace] = useState("");
   const [chosenDate, setChosenDate] = useState("날짜를 선택해주세요!");
+  const [sendDate, setSendDate] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [stuffs, setStuffs] = useState([
     { name: "폼클렌징" },
@@ -35,7 +36,7 @@ export default function CheckList({ navigation }) {
   ]);
   const [supply, setSupply] = useState("");
   const [update, setUpdate] = useState(false);
-  const GOOGLE_PLACES_API_KEY = key.GOOGLE_PLACES_API_KEY;
+  const GOOGLE_PLACES_API_KEY = api.GOOGLE_PLACES_API_KEY;
 
   const dispatch = useDispatch();
 
@@ -48,7 +49,8 @@ export default function CheckList({ navigation }) {
   // 날짜 선택
   const handleDatePicker = (datetime) => {
     setIsVisible(false);
-    setChosenDate(moment(datetime).format("YYYYMMDD"));
+    setChosenDate(moment(datetime).format("YYYY년 MM월 DD일"));
+    setSendDate(moment(datetime).format("YYYYMMDD"));
   };
 
   // 날짜 선택창 보여주기
@@ -81,7 +83,7 @@ export default function CheckList({ navigation }) {
         createCheckList({
           content,
           stuffs,
-          date: chosenDate,
+          date: sendDate,
           place: "대구",
         })
       );
@@ -92,9 +94,14 @@ export default function CheckList({ navigation }) {
   };
 
   // 준비물 삭제
-  const supplyRemove = (id) => {
-    const { stuffs } = this.state;
-    setStuffs(stuffs.filter((supply) => supply.id !== id));
+  const supplyRemove = (name) => {
+    setStuffs(stuffs.filter((supply) => supply.name !== name));
+  };
+
+  // 준비물 검색
+  const searchSupply = (value) => {
+    setSupply(value);
+    const { data } = api.searchSupply({ data: value });
   };
 
   return (
@@ -162,7 +169,7 @@ export default function CheckList({ navigation }) {
                 key: GOOGLE_PLACES_API_KEY,
                 language: "ko",
               }}
-              onPress={(data, details = null) => setPlace(place)}
+              onPress={(data, details = null) => console.log(data)}
               onFail={(error) => console.error(error)}
               requestUrl={{
                 url:
@@ -224,7 +231,7 @@ export default function CheckList({ navigation }) {
                       {supply.name}
                     </ListItem.Title>
                   </ListItem.Content>
-                  <TouchableOpacity onPress={() => supplyRemove(supply.id)}>
+                  <TouchableOpacity onPress={() => supplyRemove(supply.name)}>
                     <ListItem.Chevron name="close" type="evilicon" />
                   </TouchableOpacity>
                 </ListItem>
@@ -239,7 +246,7 @@ export default function CheckList({ navigation }) {
                 style={styles.input_stuff}
                 placeholder="준비물을 입력하세요."
                 value={supply}
-                onChangeText={(supply) => setSupply(supply)}
+                onChangeText={(value) => searchSupply(value)}
                 rightIcon={
                   <Octicons
                     name="plus"
