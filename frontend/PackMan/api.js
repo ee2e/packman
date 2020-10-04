@@ -16,10 +16,16 @@ const callApi = async (method, path, data, jwt, params = {}) => {
 
 export default {
   GOOGLE_PLACES_API_KEY: "AIzaSyArYM2tY8P0JfCqG4IAgFXBHEKo7OsfZZg",
+
   createAccount: (form) => callApi("post", "/accounts/", form),
   login: (form) => callApi("post", "/accounts/login/", form),
+
   createSupplies: (id, token, form) =>
     callApi("post", `/checks/${id}/new/`, form, token),
+  searchSupply: (form) => callApi("post", "/checks/search/", form),
+
+  dateSend: (form) => callApi("post", "/utilities/date/", form),
+  placeSend: (form) => callApi("post", "/utilities/place/", form),
   // rooms: (page = 1, token) =>
   //   callApi("get", `/rooms/?page=${page}`, null, token),
   // favs: (id, token) => callApi("get", `/users/${id}/favs/`, null, token),
