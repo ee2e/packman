@@ -24,6 +24,8 @@ export default {
     callApi("post", `/checks/${id}/new/`, form, token),
   searchSupply: (form) => callApi("post", "/checks/search/", form),
 
+  detect: (form) => callApi("post", "/utilities/detect/", form),
+  
   dateSend: (form) => callApi("post", "/utilities/date/", form),
   placeSend: (form) => callApi("post", "/utilities/place/", form),
   // rooms: (page = 1, token) =>

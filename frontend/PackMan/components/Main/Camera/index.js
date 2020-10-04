@@ -41,6 +41,21 @@ export default function TakePhoto({ navigation }) {
     return <Text>No access to camera</Text>;
   }
 
+  async function sendImage (params) {
+    try {
+      setUrl(api.AWS_S3_SERVER + params.Key);
+      console.log(url);
+      const {status} = await api.detect({
+        url: url
+      })
+      if (status == 201) {
+        alert("success");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
     <View style={{ flex: 1 }}>
       <EvilIcons
@@ -101,6 +116,9 @@ export default function TakePhoto({ navigation }) {
                     // console.log(err);
                     return alert("There was an error uploading your photo");
                   }
+                  
+                  sendImage(params);
+
                   Alert.alert(
                     "Alert",
                     "Successfully uploaded photo.",
