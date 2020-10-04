@@ -3,6 +3,7 @@ import { Alert, View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
+import api from "../../../api";
 
 const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
@@ -26,6 +27,7 @@ var s3 = new AWS.S3({
 export default function TakePhoto({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -45,6 +47,7 @@ export default function TakePhoto({ navigation }) {
     try {
       setUrl(api.AWS_S3_SERVER + params.Key);
       console.log(url);
+      console.log(typeof url);
       const {status} = await api.detect({
         url: url
       })
