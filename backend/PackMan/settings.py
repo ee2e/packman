@@ -150,3 +150,23 @@ if not DEBUG:
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
         "rest_framework.renderers.JSONRenderer",
     ]
+
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
+
+# settings.py
+# ap-northeast-2
+...
+# S3 Storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# AWS Access
+AWS_ACCESS_KEY_ID = 'AKIA3IDIIPPFDKAGJHHJ'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'packmanpy'
+...
