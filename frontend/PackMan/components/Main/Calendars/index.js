@@ -196,7 +196,7 @@ export default function AgendaScreen({ navigation, route }) {
         type="font-awesome"
         color="#03bcdb"
         containerStyle={styles.btnContainer}
-        onPress={() => alert("click")}
+        onPress={() => navigation.navigate("checkList")}
       />
     </>
   );
