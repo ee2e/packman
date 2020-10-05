@@ -23,7 +23,7 @@ export default {
 
   createSupplies: (id, token, form) =>
     callApi("post", `/checks/${id}/new/`, form, token),
-  searchSupply: (form) => callApi("post", "/checks/search/", form),
+  searchSupply: (form) => callApi("post", "/checks/search/")
 
   detect: (form) => callApi("post", "/utilities/detect/", form),
 
