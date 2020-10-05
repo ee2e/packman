@@ -26,6 +26,12 @@ export default function Main() {
             <MaterialCommunityIcons name="calendar" color={color} size={26} />
           ),
         }}
+        // listeners={{
+        //   focus: (e) => {
+        //     // Prevent default action
+        //     alert("후");
+        //   },
+        // }}
       />
       <Tab.Screen
         name="checkList"

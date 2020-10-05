@@ -3,9 +3,10 @@ import { Alert, View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
+import api from "../../../api";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const screenWidth = Dimensions.get("screen").width;
+const screenHeight = Dimensions.get("screen").height;
 
 var albumBucketName = "pack-man";
 var bucketRegion = "ap-northeast-2";
@@ -26,6 +27,7 @@ var s3 = new AWS.S3({
 export default function TakePhoto({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -41,6 +43,22 @@ export default function TakePhoto({ navigation }) {
     return <Text>No access to camera</Text>;
   }
 
+  async function sendImage (params) {
+    try {
+      setUrl(api.AWS_S3_SERVER + params.Key);
+      console.log(url);
+      console.log(typeof url);
+      const {status} = await api.detect({
+        url: url
+      })
+      if (status == 201) {
+        alert("success");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
     <View style={{ flex: 1 }}>
       <EvilIcons
@@ -62,7 +80,7 @@ export default function TakePhoto({ navigation }) {
             flex: 1,
             flexDirection: "row",
             backgroundColor: "white",
-            marginTop: windowHeight - 320,
+            marginTop: screenHeight - 320,
           }}
         >
           <TouchableOpacity
@@ -101,6 +119,9 @@ export default function TakePhoto({ navigation }) {
                     // console.log(err);
                     return alert("There was an error uploading your photo");
                   }
+                  
+                  sendImage(params);
+
                   Alert.alert(
                     "Alert",
                     "Successfully uploaded photo.",
