@@ -34,6 +34,8 @@ def detect(request):
     print(storage)
     os.system("curl " + url + storage)
     os.system("python ../AI/yolov5/detect.py")
+    #aifile = 
+    os.remove("../AI/yolov5/inference/images/" + start + ".jpg")
 
 
     # ap-northeast-2
@@ -44,7 +46,7 @@ def detect(request):
     s3.upload_file(fileurl, bucket_name, filename)
     # os.system("curl " + url + " > ../AI/yolov5/inference/images/a.jpg")
 
-
+    os.remove(fileurl)
     # AWS_ACCESS_KEY_ID = "AKIA3IDIIPPFDKAGJHHJ"
     # AWS_SECRET_ACCESS_KEY = "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"
     # AWS_DEFAULT_REGION = "ap-northeast-2"
