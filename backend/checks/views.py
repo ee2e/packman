@@ -52,7 +52,6 @@ from .permissions import IsOwner
 from accounts.models import User
 from accounts.serializers import UserSerializer
 from utilities.models import Date, Place
-import json
 
 
 class CheckViewSet(ModelViewSet):
@@ -63,7 +62,7 @@ class CheckViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action == "list" or self.action == "retrieve" or self.action == "search":
             permission_classes = [permissions.AllowAny]
-        elif self.action == "new":
+        elif self.action == "new" or self.action == "checklist":
             permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [IsOwner]
@@ -118,3 +117,10 @@ class CheckViewSet(ModelViewSet):
     @action(detail=True, methods=["post"])
     def search(self, request, pk):
         pass
+
+    @action(detail=True, methods=["get"])
+    def checklist(self, request, pk):
+        user = self.get_object()
+        supplies = Supplies.objects.filter(owner=user)
+        serializer = SuppliesSerializer(supplies, many=True)
+        return Response(serializer.data)

@@ -4,11 +4,7 @@ import api from "../api";
 const checksSlice = createSlice({
   name: "checks",
   initialState: {
-    explore: {
-      page: 1,
-      rooms: [],
-    },
-    favs: [],
+    checks: [],
   },
   reducers: {
     setExploreChecks(state, action) {
@@ -30,7 +26,9 @@ const checksSlice = createSlice({
       const {
         payload: { checkId },
       } = action;
-      const check = state.explore.checks.find((check) => checks.id === checkId);
+      const check = state.explore.checks.find(
+        (checks) => checks.id === checkId
+      );
       if (check) {
         if (check.is_fav) {
           check.is_fav = false;
@@ -41,6 +39,18 @@ const checksSlice = createSlice({
         }
       }
     },
+    setCheckLists(state, action) {
+      state.checks = action.payload;
+    },
+    setCheckList(state, action) {
+      const {
+        payload: { checkId },
+      } = action;
+      const check = state.explore.checks.find((check) => check.id === checkId);
+      if (check) {
+        state.checkLists.push(check);
+      }
+    },
   },
 });
 
@@ -49,6 +59,7 @@ export const {
   increasePage,
   setFavs,
   setFav,
+  setCheckLists,
 } = checksSlice.actions;
 
 export const getRooms = (page) => async (dispatch, getState) => {
@@ -76,7 +87,19 @@ export const createCheckList = (form) => async (dispatch, getState) => {
   } = getState();
   try {
     const { data } = await api.createSupplies(id, token, form);
-    // dispatch(setFavs(data));
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+export const checkListShow = () => async (dispatch, getState) => {
+  const {
+    usersReducer: { id, token },
+  } = getState();
+  try {
+    const { data } = await api.myChecklist(id, token);
+    dispatch(setCheckLists(data));
+    // console.log(data);
   } catch (e) {
     console.warn(e);
   }

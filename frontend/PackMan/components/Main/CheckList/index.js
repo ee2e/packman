@@ -19,7 +19,7 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import api from "../../../api";
 import { useDispatch } from "react-redux";
-import { createCheckList } from "../../../redux/checksSlice";
+import { createCheckList, checkListShow } from "../../../redux/checksSlice";
 
 const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
@@ -44,6 +44,8 @@ export default function CheckList({ navigation }) {
   const resetDate = () => {
     setContent("");
     setChosenDate("날짜를 선택해주세요!");
+    setSendDate("");
+    setPlace("");
   };
 
   // 날짜 선택
@@ -84,10 +86,12 @@ export default function CheckList({ navigation }) {
           content,
           stuffs,
           date: sendDate,
-          place: "대구",
+          place,
         })
       );
-      // resetDate();
+      resetDate();
+      dispatch(checkListShow());
+      navigation.navigate("calendar");
     } catch (error) {
       console.log(error);
     }
@@ -169,7 +173,7 @@ export default function CheckList({ navigation }) {
                 key: GOOGLE_PLACES_API_KEY,
                 language: "ko",
               }}
-              onPress={(data, details = null) => console.log(data)}
+              onPress={(data, details = null) => setPlace(data.description)}
               onFail={(error) => console.error(error)}
               requestUrl={{
                 url:
