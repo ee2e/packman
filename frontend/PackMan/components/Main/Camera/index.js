@@ -43,29 +43,29 @@ export default function TakePhoto({ navigation }) {
     return <Text>No access to camera</Text>;
   }
 
-  async function sendImage (params) {
+  async function sendImage(params) {
     try {
       setUrl(api.AWS_S3_SERVER + params.Key);
       console.log(url);
       console.log(typeof url);
-      const {status} = await api.detect({
-        url: url
-      })
+      const { status } = await api.detect({
+        url: url,
+      });
       if (status == 201) {
         alert("success");
       }
     } catch (error) {
       console.log(error);
     }
-  };
-  
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <EvilIcons
         name="close"
         size={30}
         color="black"
-        style={{ marginTop: 40, marginBottom: 10, marginLeft: 10 }}
+        style={{ marginTop: 50, marginBottom: 10, marginLeft: 10 }}
         onPress={() => navigation.goBack()}
       />
       <Camera
@@ -79,15 +79,14 @@ export default function TakePhoto({ navigation }) {
           style={{
             flex: 1,
             flexDirection: "row",
-            backgroundColor: "white",
-            marginTop: screenHeight - 320,
+            backgroundColor: "transparent",
           }}
         >
           <TouchableOpacity
             style={{
               flex: 1,
               alignItems: "center",
-              marginTop: 55,
+              marginTop: screenHeight - 300,
             }}
             onPress={async () => {
               if (cameraRef) {
@@ -119,7 +118,7 @@ export default function TakePhoto({ navigation }) {
                     // console.log(err);
                     return alert("There was an error uploading your photo");
                   }
-                  
+
                   sendImage(params);
 
                   Alert.alert(
