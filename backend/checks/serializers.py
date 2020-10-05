@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Supplies, Stuff
 from accounts.serializers import UserSerializer
+from utilities.serializers import DateSerializer, PlaceSerializer
 
 class StuffSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,6 +11,14 @@ class StuffSerializer(serializers.ModelSerializer):
 class SuppliesSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
     stuffs = StuffSerializer(many=True)
+    date = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='number'
+     )
+    place = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='name'
+     )
     class Meta:
         model = Supplies
         fields = '__all__'
