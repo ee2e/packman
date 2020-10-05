@@ -1,28 +1,15 @@
 from django.db import models
 from django.conf import settings
 
-# Create your models here.
-class Check_list(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    date = models.IntegerField()
-    content = models.TextField()
-    place = models.CharField(max_length=30)
-    stufflist = models.CharField(max_length=10)
+class Stuff(models.Model):
+    name = models.CharField(max_length=20)
+    check = models.BooleanField(default=False)
+
+class Supplies(models.Model):
+    content = models.CharField(max_length=100)
+    stuffs = models.ManyToManyField(Stuff, related_name="supply_stuff", blank=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.ForeignKey("utilities.Date", related_name="supply_date", on_delete=models.PROTECT)
+    place = models.ForeignKey("utilities.Place", related_name="supply_place", on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now= True)
-    
-
-class Stuff(models.Model):
-    check_id = models.ForeignKey(Check_list, on_delete=models.CASCADE)
-    stuffname = models.CharField(max_length=10)
-
-class recommand(models.Model):
-    place = models.CharField(max_length=30)
-    plusstuff = models.CharField(max_length=30)
-
-def upload_path(instance, filename):
-    return '/'.join['covers', str(instance.checklist), filename]
-
-class CheckImage(models.Model):
-    checklist = models.ForeignKey(Check_list, on_delete=models.CASCADE)
-    # image = models.ImageField(blank=True, null=True, upload_to=upload_path)

@@ -76,7 +76,7 @@ drive.mount('/content/gdrive')
 > detect 명령어
 >
 > ```python
-> python detect.py --source ./inference/images/ --weights ./runs/exp44/weights/best.pt --conf 0.4
+> python detect.py --source ./inference/images/ --weights ./weights/best.pt --conf 0.2
 > ```
 
 

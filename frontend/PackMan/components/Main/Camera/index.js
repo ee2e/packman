@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Button } from "react-native";
+import { Alert, View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
+import api from "../../../api";
+
+const screenWidth = Dimensions.get("screen").width;
+const screenHeight = Dimensions.get("screen").height;
 
 var albumBucketName = "pack-man";
 var bucketRegion = "ap-northeast-2";
@@ -23,6 +27,7 @@ var s3 = new AWS.S3({
 export default function TakePhoto({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -38,13 +43,29 @@ export default function TakePhoto({ navigation }) {
     return <Text>No access to camera</Text>;
   }
 
+  async function sendImage (params) {
+    try {
+      setUrl(api.AWS_S3_SERVER + params.Key);
+      console.log(url);
+      console.log(typeof url);
+      const {status} = await api.detect({
+        url: url
+      })
+      if (status == 201) {
+        alert("success");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
     <View style={{ flex: 1 }}>
       <EvilIcons
         name="close"
         size={30}
         color="black"
-        style={{ marginTop: 50, marginBottom: 10, marginLeft: 10 }}
+        style={{ marginTop: 40, marginBottom: 10, marginLeft: 10 }}
         onPress={() => navigation.goBack()}
       />
       <Camera
@@ -59,7 +80,7 @@ export default function TakePhoto({ navigation }) {
             flex: 1,
             flexDirection: "row",
             backgroundColor: "white",
-            marginTop: 480,
+            marginTop: screenHeight - 320,
           }}
         >
           <TouchableOpacity
@@ -95,13 +116,26 @@ export default function TakePhoto({ navigation }) {
                 // 업로드
                 s3.upload(params, function (err, data) {
                   if (err) {
-                    console.log(err);
+                    // console.log(err);
                     return alert("There was an error uploading your photo");
                   }
-                  alert("Successfully uploaded photo.");
+                  
+                  sendImage(params);
+
+                  Alert.alert(
+                    "Alert",
+                    "Successfully uploaded photo.",
+                    [
+                      {
+                        text: "확인",
+                        onPress: () => navigation.navigate("calendar"),
+                      },
+                    ],
+                    { cancelable: true }
+                  );
                 });
 
-                console.log(params);
+                // console.log(params);
               }
             }}
           >
