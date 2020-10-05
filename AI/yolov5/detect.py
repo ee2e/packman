@@ -142,7 +142,7 @@ def detect(save_img=False):
                 pprint(json_data)
                 print(type(json_data))
 
-                with open('./inference/test/output/labels.json', 'w', encoding='utf-8') as make_file:
+                with open('./inference/output/labels.json', 'w', encoding='utf-8') as make_file:
                     json.dump(data, make_file, ensure_ascii=False, indent='\t')
 
             # Print time (inference + NMS)
