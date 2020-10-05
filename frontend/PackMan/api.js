@@ -5,7 +5,7 @@ const callApi = async (method, path, data, jwt, params = {}) => {
     Authorization: `Bearer ${jwt}`,
     "Content-Type": "application/json",
   };
-  const baseUrl = "http://127.0.0.1:8000/api/v1";
+  const baseUrl = "http://192.168.0.109:8000/api/v1";
   const fullUrl = `${baseUrl}${path}`;
   if (method === "get" || method === "delete") {
     return axios[method](fullUrl, { headers, params });
@@ -16,6 +16,7 @@ const callApi = async (method, path, data, jwt, params = {}) => {
 
 export default {
   GOOGLE_PLACES_API_KEY: "AIzaSyArYM2tY8P0JfCqG4IAgFXBHEKo7OsfZZg",
+  AWS_S3_SERVER: "https://pack-man.s3.ap-northeast-2.amazonaws.com/",
 
   createAccount: (form) => callApi("post", "/accounts/", form),
   login: (form) => callApi("post", "/accounts/login/", form),
@@ -23,6 +24,8 @@ export default {
   createSupplies: (id, token, form) =>
     callApi("post", `/checks/${id}/new/`, form, token),
   searchSupply: (form) => callApi("post", "/checks/search/")
+
+  detect: (form) => callApi("post", "/utilities/detect/", form),
 
   dateSend: (form) => callApi("post", "/utilities/date/", form),
   placeSend: (form) => callApi("post", "/utilities/place/", form),

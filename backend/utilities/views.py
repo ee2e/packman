@@ -16,7 +16,7 @@ import os
 
 @api_view(['POST'])
 def detect(request):
-    url = request.POST.get('url')
+    url = request.data.get('url')
     print(url)
     start = str(int(time.time()))
     print(start)
