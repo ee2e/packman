@@ -14,6 +14,10 @@ import os
 import boto3
 
 
+# json return
+# from django.http import HttpResponse
+
+
 
 AWS_ACCESS_KEY_ID = "AKIA3IDIIPPFDKAGJHHJ"
 AWS_SECRET_ACCESS_KEY = "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"
@@ -52,6 +56,9 @@ def detect(request):
     # AWS_DEFAULT_REGION = "ap-northeast-2"
     # AWS_BUCKET_NAME = "packmanpy"
 
+    dicurlname = fileurl + '.json'
+    dicurl = open(dicurlname)
+    data = json.load(dicurl)
 
 
     # BASE_DIR = os.getcwd()
@@ -77,7 +84,7 @@ def detect(request):
 #     # with open(file_path, 'rb') as data:
 #     buckets.upload_file(fileurl, key_name)
 
-    return HttpResponse("OK")
+    return HttpResponse(data)
 
     # C:\Users\multicampus\Desktop\ach\s03p23d208\AI\yolov5\inference\images
     # AI\yolov5\inference\images
