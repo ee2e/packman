@@ -187,7 +187,7 @@ if __name__ == '__main__':
     # file/folder, 0 for webcam
     parser.add_argument('--source', type=str,
                         default='../AI/yolov5/inference/images', help='source')
-    parser.add_argument('--output', type=str, default='../AI/yolov5/inference/output',
+    parser.add_argument('--output', type=str, default='../backend/static',
                         help='output folder')  # output folder
     parser.add_argument('--img-size', type=int, default=416,
                         help='inference size (pixels)')
