@@ -18,11 +18,10 @@ import boto3
 # from django.http import HttpResponse
 
 
-
-AWS_ACCESS_KEY_ID = "AKIA3IDIIPPFDKAGJHHJ"
-AWS_SECRET_ACCESS_KEY = "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"
+AWS_ACCESS_KEY_ID = "AKIAIVPM3UIRJJ47XPNQ"
+AWS_SECRET_ACCESS_KEY = "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"
 AWS_DEFAULT_REGION = "ap-northeast-2"
-AWS_BUCKET_NAME = "packmanpy"
+AWS_BUCKET_NAME = "pack-man"
 # import xmltodict
 # import json
 
@@ -43,10 +42,14 @@ def detect(request):
 
 
     # ap-northeast-2
-    s3 = boto3.client('s3')
+    s3 = boto3.resource(
+        's3',
+        aws_access_key_id="AKIAIVPM3UIRJJ47XPNQ",
+        aws_secret_access_key="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"
+    )
     filename = start + ".jpg"
     fileurl = "../backend/static/"+filename
-    bucket_name = 'packmanpy'
+    bucket_name = "pack-man"
     s3.upload_file(fileurl, bucket_name, filename)
     # os.system("curl " + url + " > ../AI/yolov5/inference/images/a.jpg")
 
