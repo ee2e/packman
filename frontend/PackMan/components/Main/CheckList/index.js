@@ -90,8 +90,10 @@ export default function CheckList({ navigation }) {
         })
       );
       resetDate();
-      dispatch(checkListShow());
-      navigation.navigate("calendar");
+      setTimeout(() => {
+        dispatch(checkListShow());
+        navigation.navigate("calendar");
+      }, 1000);
     } catch (error) {
       console.log(error);
     }

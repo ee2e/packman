@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  CheckBox,
-} from "react-native";
+import { Alert, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Agenda, LocaleConfig } from "react-native-calendars";
-import { Icon } from "react-native-elements";
+import { Icon, Text, CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { checkListShow } from "../../../redux/checksSlice";
 
@@ -65,6 +58,7 @@ export default function AgendaScreen({ navigation, route }) {
   const [title, setTitle] = useState("");
 
   const checks = useSelector((state) => state.checksReducer.checks);
+  const dataBoolean = useSelector((state) => state.checksReducer.dataBoolean);
 
   useEffect(() => {
     const year = new Date().getFullYear();
@@ -73,8 +67,11 @@ export default function AgendaScreen({ navigation, route }) {
 
     setTitle(year + "년 " + month + "월");
 
-    dispatch(checkListShow());
-    loadItems();
+    setTimeout(() => {
+      dispatch(checkListShow());
+      loadItems();
+    }, 1000);
+    console.log("작동하니?");
   }, []);
 
   function loadItems(day) {
@@ -96,7 +93,6 @@ export default function AgendaScreen({ navigation, route }) {
       if (!items[newDate]) {
         items[newDate] = [];
       }
-      console.log(check.stuffs);
       items[newDate].push({
         id: check.id,
         name: check.content,
@@ -131,11 +127,15 @@ export default function AgendaScreen({ navigation, route }) {
           )
         }
       >
-        <Text>{item.name}</Text>
+        <Text
+          h4
+          style={{ textAlign: "center", marginTop: 10, marginBottom: 15 }}
+        >
+          {item.name}
+        </Text>
         {item.stuffs.map((stuff) => (
           <View key={stuff.id}>
-            <CheckBox value={stuff.check} />
-            <Text>{stuff.name}</Text>
+            <CheckBox title={stuff.name} checked={stuff.check} />
           </View>
         ))}
       </TouchableOpacity>

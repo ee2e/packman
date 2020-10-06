@@ -5,6 +5,7 @@ const checksSlice = createSlice({
   name: "checks",
   initialState: {
     checks: [],
+    dataBoolean: false,
   },
   reducers: {
     setExploreChecks(state, action) {
@@ -99,7 +100,6 @@ export const checkListShow = () => async (dispatch, getState) => {
   try {
     const { data } = await api.myChecklist(id, token);
     dispatch(setCheckLists(data));
-    // console.log(data);
   } catch (e) {
     console.warn(e);
   }
