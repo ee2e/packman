@@ -44,7 +44,10 @@ def detect(request):
     os.system("curl " + url + storage)
     os.system("python ../AI/yolov5/detect.py")
     #aifile = 
-    os.remove("../AI/yolov5/inference/images/" + start + ".jpg")
+    print('0000000000000000000000000000000000000000000000000000000')
+    ###############################
+    
+    # os.remove("../AI/yolov5/inference/images/" + start + ".jpg")
 
 
     # ap-northeast-2
@@ -55,46 +58,13 @@ def detect(request):
     s3.upload_file(fileurl, bucket_name, filename)
     # os.system("curl " + url + " > ../AI/yolov5/inference/images/a.jpg")
 
-    os.remove(fileurl)
-    # AWS_ACCESS_KEY_ID = "AKIA3IDIIPPFDKAGJHHJ"
-    # AWS_SECRET_ACCESS_KEY = "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"
-    # AWS_DEFAULT_REGION = "ap-northeast-2"
-    # AWS_BUCKET_NAME = "packmanpy"
+
+
 
     dicurlname = fileurl + '.json'
     dicurl = open(dicurlname)
     data = json.load(dicurl)
 
 
-    # BASE_DIR = os.getcwd()
-    #IMAGE_DIR = os.path.join(BASE_DIR, 'images')
-
-
-#     client = boto3.client('s3',
-#                         aws_access_key_id=AWS_ACCESS_KEY_ID,
-#                         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-#                         region_name=AWS_DEFAULT_REGION
-#                         )
-#     s3 = boto3.resource('s3')
-
-#     buckets = s3.Bucket(name=AWS_BUCKET_NAME)
-
-# #    file_path = os.path.join(fileurl, filename)
-#     # 저장될 데이터의 이름 -> key로 사용
-#     key_name = filename
-
-#     # upload_file(image파일 주소, 저장될 파일 이름)
-#     # buckets.upload_file(file_path, 'mcpro.png')
-
-#     # with open(file_path, 'rb') as data:
-#     buckets.upload_file(fileurl, key_name)
 
     return HttpResponse(data)
-
-    # C:\Users\multicampus\Desktop\ach\s03p23d208\AI\yolov5\inference\images
-    # AI\yolov5\inference\images
-
-# def travelweather(request):
-
-
-# def nowweather(request):
