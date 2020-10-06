@@ -1,3 +1,6 @@
+#카카오
+from django.shortcuts import render, redirect
+
 import jwt
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -12,6 +15,9 @@ from .serializers import UserSerializer
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+# kakao
+import requests
 
 
 class UsersViewSet(ModelViewSet):
@@ -33,3 +39,46 @@ class UsersViewSet(ModelViewSet):
             return Response(data={"token": encoded_jwt, "id": user.pk})
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+
+    @action(detail=False, methods=["GET"])
+    def oauth(self, request):
+        # print('-----------------------------------------------')
+        code = request.GET['code']
+        print('code='+ str(code))
+        # return Response(url)
+        # print(url)
+        client_id = 'ce1abb66697317af6ce74d35f144bb5c'
+        redirect_uri = 'http://localhost:8000/api/v1/accounts/oauth'
+
+        access_token_request_uri = 'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&'
+
+        access_token_request_uri += '&client_id=' + client_id   
+        access_token_request_uri += '&redirect_uri=' + redirect_uri
+        access_token_request_uri += '&code=' + code
+
+
+        access_token_request_uri_data = requests.get(access_token_request_uri)
+        json_data = access_token_request_uri_data.json()
+        # print(type(json_data))
+        access_token = json_data['access_token']
+        print(access_token)
+        # print(access_token_request_uri)
+        ################### 다음 페이지로.
+        return redirect('/api/v1/utilities/index/')
+
+
+    # localhost:8000/api/v1/accounts/kakao_login/      로 요청
+    @action(detail=False, methods=["GET"])
+    def kakao_login(self, request):
+        login_request_url = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
+
+        client_id = 'ce1abb66697317af6ce74d35f144bb5c'
+        redirect_uri = 'http://localhost:8000/api/v1/accounts/oauth'
+
+        login_request_url += '&client_id=' + client_id   
+        login_request_url += '&redirect_uri=' + redirect_uri
+        
+        return redirect(login_request_url)
