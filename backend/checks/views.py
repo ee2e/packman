@@ -54,7 +54,8 @@ from accounts.serializers import UserSerializer
 from utilities.models import Date, Place
 
 
-# detection 
+# detection
+ 
 from rest_framework import status
 
 
