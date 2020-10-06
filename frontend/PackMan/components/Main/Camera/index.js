@@ -27,8 +27,6 @@ var s3 = new AWS.S3({
 export default function TakePhoto({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
-  const [url, setUrl] = useState("");
-
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
@@ -43,16 +41,15 @@ export default function TakePhoto({ navigation }) {
     return <Text>No access to camera</Text>;
   }
 
-  async function sendImage(params) {
+  async function sendImage(imageUrl) {
+    console.log("imgUrl : " + imageUrl);
     try {
-      setUrl(api.AWS_S3_SERVER + params.Key);
-      console.log(url);
-      console.log(typeof url);
       const { status } = await api.detect({
-        url: url,
+        url: imageUrl,
       });
+
       if (status == 201) {
-        alert("success");
+        console.log("전송 완료");
       }
     } catch (error) {
       console.log(error);
@@ -112,14 +109,14 @@ export default function TakePhoto({ navigation }) {
                   ACL: "public-read",
                 };
 
+                const temp = api.AWS_S3_SERVER + params.Key;
+                console.log("upload url : " + temp);
+
                 // 업로드
-                s3.upload(params, function (err, data) {
+                s3.upload(params, function (err) {
                   if (err) {
-                    // console.log(err);
                     return alert("There was an error uploading your photo");
                   }
-
-                  sendImage(params);
 
                   Alert.alert(
                     "Alert",
@@ -132,9 +129,9 @@ export default function TakePhoto({ navigation }) {
                     ],
                     { cancelable: true }
                   );
-                });
 
-                // console.log(params);
+                  sendImage(temp);
+                });
               }
             }}
           >
