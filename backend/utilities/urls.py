@@ -10,4 +10,5 @@ urlpatterns = [
     # path('nowweather/', views.nowweather),
     # path('<int:check_pk>/', views.check_detail),
     # path('picture/', views.getpicture),
+    path('index/', views.index),
 ]

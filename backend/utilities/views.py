@@ -17,6 +17,11 @@ import boto3
 # json return
 # from django.http import HttpResponse
 
+# test
+from django.shortcuts import render, redirect
+def index(request):
+    return render(request, 'index.html')
+
 
 
 AWS_ACCESS_KEY_ID = "AKIA3IDIIPPFDKAGJHHJ"
