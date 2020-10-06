@@ -54,6 +54,12 @@ from accounts.serializers import UserSerializer
 from utilities.models import Date, Place
 
 
+# detection
+ 
+from rest_framework import status
+
+
+
 class CheckViewSet(ModelViewSet):
 
     queryset = User.objects.all()
@@ -124,3 +130,40 @@ class CheckViewSet(ModelViewSet):
         supplies = Supplies.objects.filter(owner=user)
         serializer = SuppliesSerializer(supplies, many=True)
         return Response(serializer.data)
+
+
+
+    # localhost:8000/api/v1/checks/distinction/
+    # distinct stuff
+    @action(detail=False, methods=["post"])
+    def distinction(self, request):
+        check_data = request.data.get("check")             # 리스트로 저장
+        check_data = check_data.split()
+        # print(check_data)
+        # print(type(check_data))
+        # print(check_data[0])
+        add_data = request.data.get("addcheck")       # 리스트로 저장 
+        add_data = add_data.split()
+
+        haved_stuffs = Stuff.objects.all()
+        # print(haved_stuffs)
+        DB_list = []
+        for stuff in haved_stuffs:
+            # print(stuff.name)
+            DB_list.append(stuff.name)
+        # print(DB_list)
+
+        if check_data:
+            for item in check_data:
+                if item in DB_list:
+                    a = Stuff.objects.filter(name=item)[0]
+                    a.check = True
+                    a1.save()
+        
+        if add_data:
+            for c in add_data:
+                a = Stuff()
+                a.name = c
+                a.check = True
+                a.save()
+        return Response(status=status.HTTP_201_CREATED)
