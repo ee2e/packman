@@ -12,13 +12,6 @@ import os
 
 #s3
 import boto3
-<<<<<<< HEAD
-import json
-from botocore.exceptions import ClientError
-import logging
-
-=======
->>>>>>> 18641d234a92bb04bcd82fbfa62cb5e7b2c98c88
 import json
 from botocore.exceptions import ClientError
 import logging
