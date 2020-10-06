@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  CheckBox,
-} from "react-native";
+import { Alert, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Agenda, LocaleConfig } from "react-native-calendars";
-import { Icon } from "react-native-elements";
+import { Icon, Text, CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { checkListShow } from "../../../redux/checksSlice";
 
@@ -59,23 +52,32 @@ export default function AgendaScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   const testIDs = require("../testIDs");
+  const checks = useSelector((state) => state.checksReducer.checks);
 
   const [items, setItems] = useState({});
   const [currentDate, setCurrentDate] = useState("");
   const [title, setTitle] = useState("");
 
-  const checks = useSelector((state) => state.checksReducer.checks);
-
   useEffect(() => {
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth() + 1;
-    const day = new Date().getDate();
+    const unsubscribe = navigation.addListener("focus", () => {
+      setTimeout(() => {
+        dispatch(checkListShow());
+        loadItems();
+      }, 2000);
+    });
 
-    setTitle(year + "년 " + month + "월");
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
-    dispatch(checkListShow());
-    loadItems();
-  }, []);
+  // useEffect(() => {
+  //   console.log("너 몇번?");
+  //   setItems({});
+  //   setTimeout(() => {
+  //     dispatch(checkListShow());
+  //     loadItems();
+  //   }, 1000);
+  // }, [TEMP]);
 
   function loadItems(day) {
     for (const check of checks) {
@@ -96,7 +98,6 @@ export default function AgendaScreen({ navigation, route }) {
       if (!items[newDate]) {
         items[newDate] = [];
       }
-      console.log(check.stuffs);
       items[newDate].push({
         id: check.id,
         name: check.content,
@@ -104,10 +105,12 @@ export default function AgendaScreen({ navigation, route }) {
         stuffs: check.stuffs,
       });
     }
+    // console.log(items);
     const newItems = {};
     Object.keys(items).forEach((key) => {
       newItems[key] = items[key];
     });
+    // console.log(newItems);
     setItems(newItems);
   }
 
@@ -115,7 +118,7 @@ export default function AgendaScreen({ navigation, route }) {
     return (
       <TouchableOpacity
         testID={testIDs.agenda.ITEM}
-        style={[styles.item, { height: item.height }]}
+        style={styles.item}
         onPress={() =>
           Alert.alert(
             `${item.date}`,
@@ -131,11 +134,15 @@ export default function AgendaScreen({ navigation, route }) {
           )
         }
       >
-        <Text>{item.name}</Text>
+        <Text
+          h4
+          style={{ textAlign: "center", marginTop: 10, marginBottom: 15 }}
+        >
+          {item.name}
+        </Text>
         {item.stuffs.map((stuff) => (
           <View key={stuff.id}>
-            <CheckBox value={stuff.check} />
-            <Text>{stuff.name}</Text>
+            <CheckBox title={stuff.name} checked={stuff.check} />
           </View>
         ))}
       </TouchableOpacity>
