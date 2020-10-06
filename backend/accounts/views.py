@@ -40,7 +40,21 @@ class UsersViewSet(ModelViewSet):
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+    # localhost:8000/api/v1/accounts/kakao_logout 
+    @action(detail=False, methods=["GET"])
+    def kakao_logout(self, request):
 
+        client_id = 'ce1abb66697317af6ce74d35f144bb5c'
+        logout_redirect_uri = 'http://localhost:8000/api/v1/accounts/oauth'
+        
+        logout_request_url = 'https://kauth.kakao.com/oauth/logout?'
+        logout_request_url += 'client_id=' + client_id   
+        logout_request_url += '&logout_redirect_uri=' + logout_redirect_uri
+
+        logout_request_url_data = requests.get(logout_request_url)
+        # json_data = logout_request_url_data.json()
+        print(logout_request_url_data)
+        return redirect('/api/v1/utilities/index/')
 
 
     @action(detail=False, methods=["GET"])
