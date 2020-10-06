@@ -14,6 +14,8 @@ import os
 import boto3
 
 
+import json
+
 # json return
 # from django.http import HttpResponse
 
@@ -64,8 +66,58 @@ def detect(request):
     dicurlname = fileurl + '.json'
     dicurl = open(dicurlname)
     data = json.load(dicurl)
-    pprint(data)
+    print(type(data))
+    print(data)
+    print(data['labels'])
+    print(data['labels'][0])
+
+    final_list = []
+    input_list = [
+        "socks",
+        "ballcap",
+        "hoody",
+        "pants",
+        "hair dryer",
+        "mask",
+        "charger",
+        "backpack",
+        "T-shirt"
+    ]
+    outlist_list = [
+        '양말', 
+        '모자', 
+        '후드', 
+        '바지', 
+        '드라이기', 
+        '마스크', 
+        '충전기', 
+        '가방', 
+        '티셔츠'
+    ]
+
+    if data['labels']:
+        for label in data['labels']:
+            for i in range(len(input_list)):
+                if label == input_list[i]:
+                    final_list.append(outlist_list[i])
+    print(final_list)
+
+#     "socks", 양말
+# "ballcap", 모자
+# "hoody", 후드
+# "pants", 바지
+# "hair dryer", 드라이기
+# "mask", 마스크
+# "charger", 충전기
+# "backpack", 가방
+# "T-shirt", 티셔츠
 
 
 
-    return HttpResponse('ok')
+    return Response(data={"stuff_list": final_list})
+
+
+    # encoded_jwt = jwt.encode(
+    #     {"pk": user.pk}, settings.SECRET_KEY, algorithm="HS256"
+    # )
+    # return Response(data={"token": encoded_jwt, "id": user.pk})
