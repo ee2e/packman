@@ -14,7 +14,7 @@ import { Text, Button, Input } from "react-native-elements";
 import { useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { userLogin } from "../../redux/usersSlice";
+import { userLogin, userKakaoLogin } from "../../redux/usersSlice";
 import utils from "../../utils";
 
 export default function SingIn({ navigation }) {
@@ -51,9 +51,13 @@ export default function SingIn({ navigation }) {
     );
   };
 
+  const doKakaoLogin = () => {
+    dispatch(userKakaoLogin());
+  };
+
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      // behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -86,7 +90,9 @@ export default function SingIn({ navigation }) {
             titleStyle={styles.title}
             onPress={doSignIn}
           />
-          <Image source={require("../../assets/kakao_login.png")} />
+          <TouchableOpacity onPress={doKakaoLogin}>
+            <Image source={require("../../assets/kakao_login.png")} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={goToFind}>
             <Text style={styles.text}>이메일 / 비밀번호 찾기</Text>
           </TouchableOpacity>

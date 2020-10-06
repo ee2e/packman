@@ -91,7 +91,7 @@ export default class SingIn extends Component {
     } = this.state;
     return (
       <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        // behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

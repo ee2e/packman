@@ -65,7 +65,7 @@ class UsersViewSet(ModelViewSet):
         # return Response(url)
         # print(url)
         client_id = 'ce1abb66697317af6ce74d35f144bb5c'
-        redirect_uri = 'http://localhost:8000/api/v1/accounts/oauth'
+        redirect_uri = 'http://127.0.0.1:8000/api/v1/accounts/oauth'
 
         access_token_request_uri = 'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&'
 
@@ -76,12 +76,12 @@ class UsersViewSet(ModelViewSet):
 
         access_token_request_uri_data = requests.get(access_token_request_uri)
         json_data = access_token_request_uri_data.json()
-        # print(type(json_data))
+        print(json_data)
         access_token = json_data['access_token']
         print(access_token)
         # print(access_token_request_uri)
         ################### 다음 페이지로.
-        return redirect('/api/v1/utilities/index/')
+        return 
 
 
     # localhost:8000/api/v1/accounts/kakao_login/      로 요청
@@ -90,9 +90,9 @@ class UsersViewSet(ModelViewSet):
         login_request_url = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
 
         client_id = 'ce1abb66697317af6ce74d35f144bb5c'
-        redirect_uri = 'http://localhost:8000/api/v1/accounts/oauth'
+        redirect_uri = 'http://127.0.0.1:8000/api/v1/accounts/oauth'
 
         login_request_url += '&client_id=' + client_id   
         login_request_url += '&redirect_uri=' + redirect_uri
-        
+
         return redirect(login_request_url)

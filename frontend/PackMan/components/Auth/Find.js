@@ -63,7 +63,7 @@ export default class Find extends Component {
 
     return (
       <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        // behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

@@ -23,6 +23,22 @@ const userSlice = createSlice({
 
 export const { logIn, logOut } = userSlice.actions;
 
+export const userKakaoLogin = (form) => async (dispatch) => {
+  try {
+    console.log("트라이");
+    // const {
+    //   data: { token },
+    // } = await api.kakaoLogin(form);
+    await api.kakaoLogin(form);
+    console.log(data);
+    // if (id && token) {
+    //   dispatch(logIn({ token, id }));
+    // }
+  } catch (e) {
+    alert("등록 된 정보가 없습니다.");
+  }
+};
+
 export const userLogin = (form) => async (dispatch) => {
   try {
     const {
@@ -31,7 +47,6 @@ export const userLogin = (form) => async (dispatch) => {
     if (id && token) {
       dispatch(logIn({ token, id }));
     }
-    console.log(token);
   } catch (e) {
     alert("등록 된 정보가 없습니다.");
   }
