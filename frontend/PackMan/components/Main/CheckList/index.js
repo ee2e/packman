@@ -253,7 +253,7 @@ export default function CheckList({ navigation }) {
                 style={styles.input_stuff}
                 placeholder="준비물을 입력하세요."
                 value={supply}
-                onChangeText={(value) => searchSupply(value)}
+                onChangeText={(value) => setSupply(value)}
                 rightIcon={
                   <Octicons
                     name="plus"

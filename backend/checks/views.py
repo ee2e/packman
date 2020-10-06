@@ -54,18 +54,22 @@ from accounts.serializers import UserSerializer
 from utilities.models import Date, Place
 
 
+# detection
+ 
+from rest_framework import status
+
+
+
 class CheckViewSet(ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get_permissions(self):
-        if self.action == "list" or self.action == "retrieve" or self.action == "search":
-            permission_classes = [permissions.AllowAny]
-        elif self.action == "new" or self.action == "checklist":
+        if self.action == "new" or self.action == "checklist":
             permission_classes = [permissions.IsAuthenticated]
         else:
-            permission_classes = [IsOwner]
+            permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]
 
 
@@ -123,4 +127,61 @@ class CheckViewSet(ModelViewSet):
         user = self.get_object()
         supplies = Supplies.objects.filter(owner=user)
         serializer = SuppliesSerializer(supplies, many=True)
+        return Response(serializer.data)
+
+
+
+    # localhost:8000/api/v1/checks/distinction/
+    # distinct stuff
+    @action(detail=True, methods=["post"])
+    def distinction(self, request, pk):
+        print(request.data)
+        # check_data = request.data.get("check")             # 리스트로 저장
+        # check_data = check_data.split()
+        # # print(check_data)
+        # # print(type(check_data))
+        # # print(check_data[0])
+        # add_data = request.data.get("addcheck")       # 리스트로 저장 
+        # add_data = add_data.split()
+
+        # haved_stuffs = Stuff.objects.all()
+        # # print(haved_stuffs)
+        # DB_list = []
+        # for stuff in haved_stuffs:
+        #     # print(stuff.name)
+        #     DB_list.append(stuff.name)
+        # # print(DB_list)
+
+        # if check_data:
+        #     for item in check_data:
+        #         if item in DB_list:
+        #             a = Stuff.objects.filter(name=item)[0]
+        #             a.check = True
+        #             a1.save()
+        
+        # if add_data:
+        #     for c in add_data:
+        #         a = Stuff()
+        #         a.name = c
+        #         a.check = True
+        #         a.save()
+
+        supplies_id = request.data.get("suppliesId")
+        stuffs = request.data.get("stuffs")
+
+        supplies = Supplies.objects.get(pk=supplies_id)
+
+        for stuff in stuffs:
+            if Stuff.objects.filter(name=stuff['name']).exists():
+                temp_stuff = Stuff.objects.get(name=stuff['name'])
+                temp_stuff.check = stuff['check']
+                temp_stuff.save()
+            else:
+                temp_stuff = Stuff.objects.create(name=stuff['name'])
+                supplies.stuffs.add(temp_stuff)
+                temp_stuff.check = stuff['check']
+                temp_stuff.save()
+
+        serializer = SuppliesSerializer(supplies, many=True)
+
         return Response(serializer.data)
