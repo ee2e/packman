@@ -68,7 +68,7 @@ export default function AgendaScreen({ navigation, route }) {
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [navigation]);
+  }, []);
 
   // useEffect(() => {
   //   console.log("너 몇번?");
