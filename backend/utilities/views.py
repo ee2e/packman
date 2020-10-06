@@ -40,13 +40,13 @@ def detect(request):
     start = str(int(time.time()))
     print(start)
     storage = "> ../AI/yolov5/inference/images/" + start + ".jpg"
-    print(storage)
+    print("Storage : " + storage)
     os.system("curl " + url + storage)
     os.system("python ../AI/yolov5/detect.py")
     #aifile = 
     print('0000000000000000000000000000000000000000000000000000000')
     ###############################
-    
+
     # os.remove("../AI/yolov5/inference/images/" + start + ".jpg")
 
 
@@ -64,7 +64,8 @@ def detect(request):
     dicurlname = fileurl + '.json'
     dicurl = open(dicurlname)
     data = json.load(dicurl)
+    pprint(data)
 
 
 
-    return HttpResponse(data)
+    return HttpResponse('ok')
