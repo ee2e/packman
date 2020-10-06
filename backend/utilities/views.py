@@ -58,17 +58,17 @@ def detect(request):
 
     # ap-northeast-2
     fileurl = "../backend/static/" + filename
-    s3 = boto3.client('s3',
-        aws_access_key_id=AWS_ACCESS_KEY_ID, 
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name=AWS_DEFAULT_REGION
-    )
-    try:
-        response = s3.upload_file(fileurl, AWS_BUCKET_NAME, filename)
-    except ClientError as e:
-        logging.error(e)
-        return false
-    return true
+    # s3 = boto3.client('s3',
+    #     aws_access_key_id=AWS_ACCESS_KEY_ID, 
+    #     aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    #     region_name=AWS_DEFAULT_REGION
+    # )
+    # try:
+    #     response = s3.upload_file(fileurl, AWS_BUCKET_NAME, filename)
+    # except ClientError as e:
+    #     logging.error(e)
+    #     return False
+    # return True
     
     # s3.upload_file(fileurl, bucket_name, filename)
     # os.system("curl " + url + " > ../AI/yolov5/inference/images/a.jpg")
