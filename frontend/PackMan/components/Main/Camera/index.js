@@ -4,6 +4,8 @@ import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import api from "../../../api";
+import CheckStuff from "../CheckStuff";
+import { createStackNavigator } from "@react-navigation/stack";
 
 const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
@@ -24,7 +26,7 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-export default function TakePhoto({ navigation }) {
+function TakePhoto({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   useEffect(() => {
@@ -44,13 +46,13 @@ export default function TakePhoto({ navigation }) {
   async function sendImage(imageUrl) {
     console.log("imgUrl : " + imageUrl);
     try {
-      const { status } = await api.detect({
+      const {
+        data: { stuff_list },
+      } = await api.detect({
         url: imageUrl,
       });
-
-      if (status == 201) {
-        console.log("전송 완료");
-      }
+      alert(stuff_list);
+      navigation.navigate("checkstuff", { stuffs: stuff_list });
     } catch (error) {
       console.log(error);
     }
@@ -129,7 +131,7 @@ export default function TakePhoto({ navigation }) {
                     ],
                     { cancelable: true }
                   );
-
+                  console.log("일");
                   sendImage(temp);
                 });
               }
@@ -162,5 +164,16 @@ export default function TakePhoto({ navigation }) {
         </View>
       </Camera>
     </View>
+  );
+}
+
+const CameraStack = createStackNavigator();
+
+export default function CameraStackScreen() {
+  return (
+    <CameraStack.Navigator headerMode="none">
+      <CameraStack.Screen name="checkstuff" component={CheckStuff} />
+      <CameraStack.Screen name="camera" component={TakePhoto} />
+    </CameraStack.Navigator>
   );
 }

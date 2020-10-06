@@ -15,7 +15,7 @@ export default function Main() {
     <Tab.Navigator
       activeColor="#f0edf6"
       labeled="true"
-      barStyle={{ backgroundColor: "#03bcdb" }}
+      barStyle={{ backgroundColor: "#03bcdb", height: 70 }}
     >
       <Tab.Screen
         name="calendar"
@@ -26,12 +26,6 @@ export default function Main() {
             <MaterialCommunityIcons name="calendar" color={color} size={26} />
           ),
         }}
-        // listeners={{
-        //   focus: (e) => {
-        //     // Prevent default action
-        //     alert("후");
-        //   },
-        // }}
       />
       <Tab.Screen
         name="checkList"
