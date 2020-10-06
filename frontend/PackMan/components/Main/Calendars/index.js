@@ -52,27 +52,32 @@ export default function AgendaScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   const testIDs = require("../testIDs");
+  const checks = useSelector((state) => state.checksReducer.checks);
 
   const [items, setItems] = useState({});
   const [currentDate, setCurrentDate] = useState("");
   const [title, setTitle] = useState("");
 
-  const checks = useSelector((state) => state.checksReducer.checks);
-  const dataBoolean = useSelector((state) => state.checksReducer.dataBoolean);
-
   useEffect(() => {
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth() + 1;
-    const day = new Date().getDate();
+    const unsubscribe = navigation.addListener("focus", () => {
+      setTimeout(() => {
+        dispatch(checkListShow());
+        loadItems();
+      }, 2000);
+    });
 
-    setTitle(year + "년 " + month + "월");
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
-    setTimeout(() => {
-      dispatch(checkListShow());
-      loadItems();
-    }, 1000);
-    console.log("작동하니?");
-  }, []);
+  // useEffect(() => {
+  //   console.log("너 몇번?");
+  //   setItems({});
+  //   setTimeout(() => {
+  //     dispatch(checkListShow());
+  //     loadItems();
+  //   }, 1000);
+  // }, [TEMP]);
 
   function loadItems(day) {
     for (const check of checks) {
@@ -100,10 +105,12 @@ export default function AgendaScreen({ navigation, route }) {
         stuffs: check.stuffs,
       });
     }
+    // console.log(items);
     const newItems = {};
     Object.keys(items).forEach((key) => {
       newItems[key] = items[key];
     });
+    // console.log(newItems);
     setItems(newItems);
   }
 
@@ -111,7 +118,7 @@ export default function AgendaScreen({ navigation, route }) {
     return (
       <TouchableOpacity
         testID={testIDs.agenda.ITEM}
-        style={[styles.item, { height: item.height }]}
+        style={styles.item}
         onPress={() =>
           Alert.alert(
             `${item.date}`,

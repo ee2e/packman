@@ -25,6 +25,7 @@ const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
 
 export default function CheckList({ navigation }) {
+  console.log("------------------------------------------------------------");
   const [content, setContent] = useState("");
   const [place, setPlace] = useState("");
   const [chosenDate, setChosenDate] = useState("날짜를 선택해주세요!");
@@ -92,7 +93,7 @@ export default function CheckList({ navigation }) {
       resetDate();
       setTimeout(() => {
         dispatch(checkListShow());
-        navigation.navigate("calendar");
+        navigation.navigate("calendar", true);
       }, 1000);
     } catch (error) {
       console.log(error);
@@ -107,7 +108,7 @@ export default function CheckList({ navigation }) {
   // 준비물 검색
   const searchSupply = (value) => {
     setSupply(value);
-    const { data } = api.searchSupply({ data: value });
+    // const { data } = api.searchSupply({ data: value });
   };
 
   return (
