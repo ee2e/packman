@@ -124,3 +124,12 @@ class CheckViewSet(ModelViewSet):
         supplies = Supplies.objects.filter(owner=user)
         serializer = SuppliesSerializer(supplies, many=True)
         return Response(serializer.data)
+
+
+
+
+    # distinct stuff
+    @action(detail=True, methods=["post"])
+    def distinction(self, request):
+        temp_date = request.data.get("date")
+        temp_date = request.data.get("date")
