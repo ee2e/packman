@@ -1,47 +1,3 @@
-# from django.shortcuts import get_object_or_404
-# from rest_framework.decorators import api_view, permission_classes
-# from rest_framework.response import Response
-# from rest_framework.permissions import IsAuthenticated
-
-# # from .serializers import CheckListSerializer, CheckSerializer, StuffSerializer, PictureSetSerializer
-# # from .models import Check_list
-
-# # @api_view(['GET'])
-# # def check_list(request):
-# #     checks = Check_list.objects.all()
-# #     serializer = CheckListSerializer(checks, many=True)
-# #     return Response(serializer.data)
-
-# # @api_view(['GET'])
-# # def check_detail(request, check_pk):
-# #     check = get_object_or_404(Check_list, pk=check_pk)
-# #     serializer = CheckSerializer(check)
-# #     return Response(serializer.data)
-
-# # @api_view(['POST'])
-# # @permission_classes([IsAuthenticated])
-# # def create_check(request):
-# #     serializer = CheckSerializer(data=request.data)
-# #     if serializer.is_valid(raise_exception=True):
-# #         serializer.save(user=request.user)  # NOT NULL CONSTRAINT FAILD #user_id=1 
-# #         return Response(serializer.data)
-
-# # @api_view(['POST'])
-# # @permission_classes([IsAuthenticated])
-# # def create_list(request):
-# #     serializer = StuffSerializer(data=request.data)
-# #     if serializer.is_valid(raise_exception=True):
-# #         serializer.save(commit=False)  # NOT NULL CONSTRAINT FAILD #user_id=1 
-# #         return Response(serializer.data)
-
-# # @api_view(['POST'])
-# # def getpicture(request):
-# #     serializer = PictureSetSerializer(data=request.data)
-# #     if serializer.is_valid(raise_exception=True):
-# #         serializer.save(commit=False)  # NOT NULL CONSTRAINT FAILD #user_id=1 
-# #         return Response(serializer.data)
-
-
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -135,36 +91,7 @@ class CheckViewSet(ModelViewSet):
     # distinct stuff
     @action(detail=True, methods=["post"])
     def distinction(self, request, pk):
-        print(request.data)
-        # check_data = request.data.get("check")             # 리스트로 저장
-        # check_data = check_data.split()
-        # # print(check_data)
-        # # print(type(check_data))
-        # # print(check_data[0])
-        # add_data = request.data.get("addcheck")       # 리스트로 저장 
-        # add_data = add_data.split()
-
-        # haved_stuffs = Stuff.objects.all()
-        # # print(haved_stuffs)
-        # DB_list = []
-        # for stuff in haved_stuffs:
-        #     # print(stuff.name)
-        #     DB_list.append(stuff.name)
-        # # print(DB_list)
-
-        # if check_data:
-        #     for item in check_data:
-        #         if item in DB_list:
-        #             a = Stuff.objects.filter(name=item)[0]
-        #             a.check = True
-        #             a1.save()
-        
-        # if add_data:
-        #     for c in add_data:
-        #         a = Stuff()
-        #         a.name = c
-        #         a.check = True
-        #         a.save()
+        user = self.get_object()
 
         supplies_id = request.data.get("suppliesId")
         stuffs = request.data.get("stuffs")
@@ -181,7 +108,8 @@ class CheckViewSet(ModelViewSet):
                 supplies.stuffs.add(temp_stuff)
                 temp_stuff.check = stuff['check']
                 temp_stuff.save()
-
-        serializer = SuppliesSerializer(supplies, many=True)
+        
+        total_supplies = Supplies.objects.filter(owner=user)
+        serializer = SuppliesSerializer(total_supplies, many=True)
 
         return Response(serializer.data)

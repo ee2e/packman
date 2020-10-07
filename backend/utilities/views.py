@@ -9,7 +9,6 @@ import requests
 import time
 import os
 
-
 #s3
 import boto3
 import json
@@ -55,66 +54,69 @@ def detect(request):
     print('0000000000000000000000000000000000000000000000000000000')
     ###############################
 
-    # os.remove("../AI/yolov5/inference/images/" + start + ".jpg")
-
-
-    # ap-northeast-2
     fileurl = "../backend/static/" + filename
-    # s3 = boto3.client('s3',
-    #     aws_access_key_id=AWS_ACCESS_KEY_ID, 
-    #     aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    #     region_name=AWS_DEFAULT_REGION
-    # )
-    # try:
-    #     response = s3.upload_file(fileurl, AWS_BUCKET_NAME, filename)
-    # except ClientError as e:
-    #     logging.error(e)
-    #     return False
-    # return True
     
-    # s3.upload_file(fileurl, bucket_name, filename)
+    newFileName = 'new' + filename
+
+    # S3 Client 생성
+    s3 = boto3.client('s3')
+
+    # 업로드할 S3 버킷
+    bucket_name = 'pack-man'
+
+    # 첫본째 매개변수 : 로컬에서 올릴 파일이름
+    # 두번째 매개변수 : S3 버킷 이름
+    # 세번째 매개변수 : 버킷에 저장될 파일 이름.
+    s3.upload_file(fileurl, bucket_name, newFileName, ExtraArgs={'ACL':'public-read'})
+
+    image_url = 'https://pack-man.s3.ap-northeast-2.amazonaws.com/new' + filename
+
     # os.system("curl " + url + " > ../AI/yolov5/inference/images/a.jpg")
 
     dicurlname = fileurl + '.json'
-    dicurl = open(dicurlname)
-    data = json.load(dicurl)
-    print(type(data))
-    print(data)
-    print(data['labels'])
-    print(data['labels'][0])
+    try: 
+        dicurl = open(dicurlname)
+        data = json.load(dicurl)
+        # print(type(data))
+        # print(data)
+        # print(data['labels'])
+        # print(data['labels'][0])
 
-    final_list = []
-    input_list = [
-        "socks",
-        "ballcap",
-        "hoody",
-        "pants",
-        "hair dryer",
-        "mask",
-        "charger",
-        "backpack",
-        "T-shirt"
-    ]
-    outlist_list = [
-        '양말', 
-        '모자', 
-        '후드', 
-        '바지', 
-        '드라이기', 
-        '마스크', 
-        '충전기', 
-        '가방', 
-        '티셔츠'
-    ]
+        final_list = []
+        input_list = [
+            "socks",
+            "ballcap",
+            "hoody",
+            "pants",
+            "hair dryer",
+            "mask",
+            "charger",
+            "backpack",
+            "T-shirt"
+        ]
+        outlist_list = [
+            '양말', 
+            '모자', 
+            '후드', 
+            '바지', 
+            '드라이기', 
+            '마스크', 
+            '충전기', 
+            '가방', 
+            '티셔츠'
+        ]
 
-    if data['labels']:
-        for label in data['labels']:
-            for i in range(len(input_list)):
-                if label == input_list[i]:
-                    final_list.append(outlist_list[i])
+        if data['labels']:
+            for label in data['labels']:
+                for i in range(len(input_list)):
+                    if label == input_list[i]:
+                        final_list.append(outlist_list[i])
+                        break
+    except:
+        final_list = ['아무것도 없음']
     print(final_list)
 
-#     "socks", 양말
+# "socks", 양말
 # "ballcap", 모자
 # "hoody", 후드
 # "pants", 바지
@@ -123,8 +125,8 @@ def detect(request):
 # "charger", 충전기
 # "backpack", 가방
 # "T-shirt", 티셔츠
-
-    return Response(data={"stuff_list": final_list})
+    print(image_url)
+    return Response(data={"stuff_list": final_list, "image_url": image_url})
 
     # encoded_jwt = jwt.encode(
     #     {"pk": user.pk}, settings.SECRET_KEY, algorithm="HS256"

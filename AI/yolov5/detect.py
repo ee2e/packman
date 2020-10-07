@@ -127,7 +127,8 @@ def detect(save_img=False):
                     if save_img or view_img:  # Add bbox to image
                         label = '%s %.2f' % (names[int(cls)], conf)
                         plot_one_box(xyxy, im0, label=label,
-                                     color=colors[int(cls)], line_thickness=3)
+                                     color=colors[int(cls)], line_thickness=10)
+                        print(label, conf)
                         # print("label name SSS : " + s)
                         # print("label name LABEL : " + label)
                         # print("!!!!!!!!!!!!!!! : " + names[int(cls)])
@@ -189,10 +190,10 @@ if __name__ == '__main__':
                         default='../AI/yolov5/inference/images', help='source')
     parser.add_argument('--output', type=str, default='../backend/static',
                         help='output folder')  # output folder
-    parser.add_argument('--img-size', type=int, default=416,
+    parser.add_argument('--img-size', type=int, default=960,
                         help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float,
-                        default=0.3, help='object confidence threshold')
+                        default=0.2, help='object confidence threshold')
     parser.add_argument('--iou-thres', type=float,
                         default=0.5, help='IOU threshold for NMS')
     parser.add_argument('--device', default='',

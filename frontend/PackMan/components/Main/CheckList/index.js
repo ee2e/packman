@@ -24,19 +24,28 @@ import { createCheckList, checkListShow } from "../../../redux/checksSlice";
 const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
 
-export default function CheckList({ navigation }) {
+export default function CheckList({ navigation, route }) {
   console.log("------------------------------------------------------------");
+  console.log(route.params.date);
+  const paramsDate =
+    route.params.date.substr(0, 4) +
+    "년 " +
+    route.params.date.substr(5, 2) +
+    "월 " +
+    route.params.date.substr(8, 2) +
+    "일";
+  const paramsDate2 =
+    route.params.date.substr(0, 4) +
+    route.params.date.substr(5, 2) +
+    route.params.date.substr(8, 2);
+
   const [content, setContent] = useState("");
   const [place, setPlace] = useState("");
-  const [chosenDate, setChosenDate] = useState("날짜를 선택해주세요!");
-  const [sendDate, setSendDate] = useState("");
+  const [chosenDate, setChosenDate] = useState(paramsDate);
+  const [sendDate, setSendDate] = useState(paramsDate2);
   const [isVisible, setIsVisible] = useState(false);
-  const [stuffs, setStuffs] = useState([
-    { name: "폼클렌징" },
-    { name: "머리끈" },
-  ]);
+  const [stuffs, setStuffs] = useState([]);
   const [supply, setSupply] = useState("");
-  const [update, setUpdate] = useState(false);
   const GOOGLE_PLACES_API_KEY = api.GOOGLE_PLACES_API_KEY;
 
   const dispatch = useDispatch();
@@ -93,7 +102,8 @@ export default function CheckList({ navigation }) {
       resetDate();
       setTimeout(() => {
         dispatch(checkListShow());
-        navigation.navigate("calendar", true);
+        console.log("체크리스트에서 확인 클릭");
+        navigation.navigate("calendars");
       }, 1000);
     } catch (error) {
       console.log(error);
@@ -111,6 +121,15 @@ export default function CheckList({ navigation }) {
     // const { data } = api.searchSupply({ data: value });
   };
 
+  const addStuff = (value) => {
+    setStuffs(
+      stuffs.concat({
+        name: supply,
+      })
+    );
+    setSupply("");
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -125,7 +144,7 @@ export default function CheckList({ navigation }) {
               color="black"
               style={{ marginTop: 30, marginBottom: 10, marginLeft: 13 }}
               onPress={() => {
-                reset();
+                resetDate();
                 navigation.goBack();
               }}
             />
@@ -259,13 +278,7 @@ export default function CheckList({ navigation }) {
                     name="plus"
                     size={24}
                     color="black"
-                    onPress={() =>
-                      setStuffs(
-                        stuffs.concat({
-                          name: supply,
-                        })
-                      )
-                    }
+                    onPress={(value) => addStuff(value)}
                   />
                 }
               />

@@ -5,6 +5,7 @@ import { Agenda, LocaleConfig } from "react-native-calendars";
 import { Icon, Text, CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { checkListShow } from "../../../redux/checksSlice";
+import { FontAwesome } from "@expo/vector-icons";
 
 import Camera from "../Camera";
 import CheckList from "../CheckList";
@@ -60,31 +61,54 @@ function Calendars({ navigation, route }) {
   const checks = useSelector((state) => state.checksReducer.checks);
 
   const [items, setItems] = useState({});
-  const [currentDate, setCurrentDate] = useState("");
+  const [currentDate, setCurrentDate] = useState();
   const [title, setTitle] = useState("");
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      setTimeout(() => {
-        dispatch(checkListShow());
-        loadItems();
-      }, 2000);
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", () => {
+  //     const year = new Date().getFullYear();
+  //     const month = new Date().getMonth() + 1;
+  //     const temp_day = new Date().getDate();
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
+  //     if (String(temp_day).length === 2) {
+  //       day = temp_day;
+  //     } else {
+  //       day = "0" + temp_day;
+  //     }
+
+  //     setTitle(year + "년 " + month + "월");
+  //     setCurrentDate(year + "-" + month + "-" + String(day));
+
+  //     console.log("캘린더로 돌아왔음");
+  //   });
+  //   return unsubscribe;
+  // }, []);
+
+  useEffect(() => {
+    const year = new Date().getFullYear();
+    const month = new Date().getMonth() + 1;
+    const temp_day = new Date().getDate();
+
+    if (String(temp_day).length === 2) {
+      day = temp_day;
+    } else {
+      day = "0" + temp_day;
+    }
+
+    setTitle(year + "년 " + month + "월");
+    setCurrentDate(year + "-" + month + "-" + String(day));
+
+    console.log("캘린더로 돌아왔음");
+    dispatch(checkListShow());
   }, []);
 
-  // useEffect(() => {
-  //   console.log("너 몇번?");
-  //   setItems({});
-  //   setTimeout(() => {
-  //     dispatch(checkListShow());
-  //     loadItems();
-  //   }, 1000);
-  // }, [TEMP]);
+  useEffect(() => {
+    console.log("난 체크가 바뀔때마다 실행되지롱~");
+    loadItems();
+  }, [checks]);
 
   function loadItems(day) {
+    const tempItems = {};
     for (const check of checks) {
       const _date = String(check.date);
       const newDate =
@@ -100,23 +124,22 @@ function Calendars({ navigation, route }) {
         "월 " +
         _date.substr(6, 2) +
         "일";
-      if (!items[newDate]) {
-        items[newDate] = [];
+      if (!tempItems[newDate]) {
+        tempItems[newDate] = [];
       }
-      items[newDate].push({
+      tempItems[newDate].push({
         id: check.id,
         name: check.content,
         date: newDate2,
         stuffs: check.stuffs,
       });
     }
-    // console.log(items);
     const newItems = {};
-    Object.keys(items).forEach((key) => {
-      newItems[key] = items[key];
+    Object.keys(tempItems).forEach((key) => {
+      newItems[key] = tempItems[key];
     });
-    // console.log(newItems);
     setItems(newItems);
+    console.log("체크리스트 다 로드했음~");
   }
 
   const renderItem = (item) => {
@@ -133,7 +156,13 @@ function Calendars({ navigation, route }) {
                 text: "취소",
                 style: "cancel",
               },
-              { text: "확인", onPress: () => navigation.navigate("camera") },
+              {
+                text: "확인",
+                onPress: () =>
+                  navigation.navigate("camera", {
+                    suppliesId: item.id,
+                  }),
+              },
             ],
             { cancelable: true }
           )
@@ -157,7 +186,22 @@ function Calendars({ navigation, route }) {
   const renderEmptyData = () => {
     return (
       <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
+        <Text style={{ fontFamily: "BMHANNA", fontSize: 20 }}>
+          준비물을 한 번 챙겨볼까요?
+        </Text>
+        <View style={{ display: "absolute", bottom: -223, left: 18 }}>
+          <View>
+            <Text
+              style={{
+                fontFamily: "BMHANNA",
+                fontSize: 20,
+              }}
+            >
+              클릭해서 등록 !&nbsp;&nbsp;
+              <FontAwesome name="hand-o-right" size={24} color="black" />
+            </Text>
+          </View>
+        </View>
       </View>
     );
   };
@@ -173,8 +217,10 @@ function Calendars({ navigation, route }) {
 
   return (
     <>
-      <View style={styles.date}>
-        <Text style={styles.dateText}>{title}</Text>
+      <View style={{ backgroundColor: "white" }}>
+        <View style={styles.date}>
+          <Text style={styles.dateText}>{title}</Text>
+        </View>
       </View>
       <Agenda
         style={styles.agendaContainer}
@@ -182,7 +228,7 @@ function Calendars({ navigation, route }) {
         items={items}
         // loadItemsForMonth={loadItems}
         onDayPress={(day) => {
-          setCurrentDate(day.year + "-" + day.month + "-" + day.day);
+          setCurrentDate(day.dateString);
           setTitle(day.year + "년 " + day.month + "월");
         }}
         renderItem={renderItem}
@@ -208,7 +254,7 @@ function Calendars({ navigation, route }) {
         type="font-awesome"
         color="#03bcdb"
         containerStyle={styles.btnContainer}
-        onPress={() => navigation.navigate("checkList")}
+        onPress={() => navigation.navigate("checkList", { date: currentDate })}
       />
     </>
   );
@@ -217,7 +263,6 @@ function Calendars({ navigation, route }) {
 const styles = StyleSheet.create({
   date: {
     marginTop: 40,
-    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
   },

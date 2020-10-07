@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Modal,
@@ -15,13 +15,22 @@ import { sendCheckStuff } from "../../../redux/checksSlice";
 export default function CheckStuff({ navigation, route }) {
   const dispatch = useDispatch();
 
-  const [stuffs, setStuffs] = useState([
-    { name: "양말", check: true },
-    { name: "지갑", check: true },
-  ]);
+  const [stuffs, setStuffs] = useState([]);
+
+  useEffect(() => {
+    var temp_stuffs = [];
+    for (const stuff of route.params.stuffs) {
+      console.log(stuff);
+      temp_stuffs = temp_stuffs.concat({ name: stuff, check: true });
+    }
+    setStuffs(temp_stuffs);
+  }, []);
 
   const checkStuff = () => {
-    dispatch(sendCheckStuff({ suppliesId: 1, stuffs: stuffs }));
+    dispatch(
+      sendCheckStuff({ suppliesId: route.params.suppliesId, stuffs: stuffs })
+    );
+    navigation.navigate("calendars");
   };
 
   const clickCheckBox = (name) => {
@@ -45,7 +54,7 @@ export default function CheckStuff({ navigation, route }) {
           color="black"
           style={{ marginTop: 30, marginBottom: 10, marginLeft: 13 }}
           onPress={() => {
-            reset();
+            setStuffs([]);
             navigation.goBack();
           }}
         />
@@ -59,11 +68,8 @@ export default function CheckStuff({ navigation, route }) {
         />
       </View>
       <Image
-        style={styles.tinyLogo}
-        source={{
-          uri:
-            "/Users/eun/Desktop/특화프로젝트/s03p23d208/backend/static/202010712356.jpeg",
-        }}
+        style={styles.aiImage}
+        source={require("../../../assets/202010804522.png")}
       />
       {stuffs.map((stuff, id) => (
         <View key={id}>
@@ -92,9 +98,10 @@ const styles = StyleSheet.create({
     marginTop: 35,
     fontSize: 20,
   },
-  tinyLogo: {
-    height: 250,
-    resizeMode: "contain",
+  aiImage: {
+    marginLeft: 100,
+    width: 170,
+    height: 300,
     marginBottom: 10,
   },
 });

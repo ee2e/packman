@@ -24,7 +24,7 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-export default function TakePhoto({ navigation }) {
+export default function TakePhoto({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   useEffect(() => {
@@ -44,13 +44,14 @@ export default function TakePhoto({ navigation }) {
   async function sendImage(imageUrl) {
     console.log("imgUrl : " + imageUrl);
     try {
-      const {
-        data: { stuff_list },
-      } = await api.detect({
+      const { data } = await api.detect({
         url: imageUrl,
       });
-      alert(stuff_list);
-      navigation.navigate("checkstuff", { stuffs: stuff_list });
+      navigation.navigate("checkStuff", {
+        suppliesId: route.params.suppliesId,
+        stuffs: data.stuff_list,
+        imageUrl: data.image_url,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -119,12 +120,11 @@ export default function TakePhoto({ navigation }) {
                   }
 
                   Alert.alert(
-                    "Alert",
-                    "Successfully uploaded photo.",
+                    "사진 업로드 완료",
+                    "조금만 기다려주세요^ㅇ^",
                     [
                       {
                         text: "확인",
-                        onPress: () => navigation.navigate("calendar"),
                       },
                     ],
                     { cancelable: true }
