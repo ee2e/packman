@@ -28,6 +28,8 @@ export default {
   searchSupply: (form) => callApi("post", "/checks/search/"),
 
   detect: (form) => callApi("post", "/utilities/detect/", form),
+  checkStuff: (id, token, form) =>
+    callApi("post", `/checks/${id}/distinction/`, form, token),
 
   dateSend: (form) => callApi("post", "/utilities/date/", form),
   placeSend: (form) => callApi("post", "/utilities/place/", form),

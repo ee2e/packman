@@ -9,9 +9,33 @@ import {
 } from "react-native";
 import { Icon, Text, CheckBox } from "react-native-elements";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { sendCheckStuff } from "../../../redux/checksSlice";
 
 export default function CheckStuff({ navigation, route }) {
-  const stuffs = ["양말", "지갑"];
+  const dispatch = useDispatch();
+
+  const [stuffs, setStuffs] = useState([
+    { name: "양말", check: true },
+    { name: "지갑", check: true },
+  ]);
+
+  const checkStuff = () => {
+    dispatch(sendCheckStuff({ suppliesId: 1, stuffs: stuffs }));
+  };
+
+  const clickCheckBox = (name) => {
+    const newStuff = [];
+    for (const stuff of stuffs) {
+      if (stuff.name === name) {
+        newStuff.push({ name: stuff.name, check: !stuff.check });
+      } else {
+        newStuff.push(stuff);
+      }
+      setStuffs(newStuff);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -31,7 +55,7 @@ export default function CheckStuff({ navigation, route }) {
           size={30}
           color="black"
           style={{ marginTop: 30, marginBottom: 10, marginRight: 13 }}
-          //   onPress={writeCheckList}
+          onPress={checkStuff}
         />
       </View>
       <Image
@@ -43,7 +67,11 @@ export default function CheckStuff({ navigation, route }) {
       />
       {stuffs.map((stuff, id) => (
         <View key={id}>
-          <CheckBox title={stuff} checked="False" />
+          <CheckBox
+            title={stuff.name}
+            checked={stuff.check}
+            onPress={() => clickCheckBox(stuff.name)}
+          />
         </View>
       ))}
     </View>

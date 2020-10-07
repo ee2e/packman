@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Alert, StyleSheet, View, TouchableOpacity } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { Agenda, LocaleConfig } from "react-native-calendars";
 import { Icon, Text, CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { checkListShow } from "../../../redux/checksSlice";
+
+import Camera from "../Camera";
+import CheckList from "../CheckList";
+import CheckStuff from "../CheckStuff";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -48,7 +53,7 @@ LocaleConfig.locales["ko"] = {
 };
 LocaleConfig.defaultLocale = "ko";
 
-export default function AgendaScreen({ navigation, route }) {
+function Calendars({ navigation, route }) {
   const dispatch = useDispatch();
 
   const testIDs = require("../testIDs");
@@ -68,7 +73,7 @@ export default function AgendaScreen({ navigation, route }) {
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [navigation]);
+  }, []);
 
   // useEffect(() => {
   //   console.log("너 몇번?");
@@ -242,3 +247,16 @@ const styles = StyleSheet.create({
     right: 15,
   },
 });
+
+const CalendarsStack = createStackNavigator();
+
+export default function CalendarsStackScreen() {
+  return (
+    <CalendarsStack.Navigator headerMode="none">
+      <CalendarsStack.Screen name="calendars" component={Calendars} />
+      <CalendarsStack.Screen name="checkList" component={CheckList} />
+      <CalendarsStack.Screen name="camera" component={Camera} />
+      <CalendarsStack.Screen name="checkStuff" component={CheckStuff} />
+    </CalendarsStack.Navigator>
+  );
+}

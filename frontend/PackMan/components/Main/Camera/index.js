@@ -4,8 +4,6 @@ import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import api from "../../../api";
-import CheckStuff from "../CheckStuff";
-import { createStackNavigator } from "@react-navigation/stack";
 
 const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
@@ -26,7 +24,7 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-function TakePhoto({ navigation }) {
+export default function TakePhoto({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   useEffect(() => {
@@ -164,16 +162,5 @@ function TakePhoto({ navigation }) {
         </View>
       </Camera>
     </View>
-  );
-}
-
-const CameraStack = createStackNavigator();
-
-export default function CameraStackScreen() {
-  return (
-    <CameraStack.Navigator headerMode="none">
-      <CameraStack.Screen name="checkstuff" component={CheckStuff} />
-      <CameraStack.Screen name="camera" component={TakePhoto} />
-    </CameraStack.Navigator>
   );
 }

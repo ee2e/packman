@@ -105,4 +105,16 @@ export const checkListShow = () => async (dispatch, getState) => {
   }
 };
 
+export const sendCheckStuff = (form) => async (dispatch, getState) => {
+  const {
+    usersReducer: { id, token },
+  } = getState();
+  try {
+    const { data } = await api.checkStuff(id, token, form);
+    dispatch(setCheckLists(data));
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
 export default checksSlice.reducer;
