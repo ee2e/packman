@@ -4,6 +4,7 @@ import { Agenda, LocaleConfig } from "react-native-calendars";
 import { Icon, Text, CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { checkListShow } from "../../../redux/checksSlice";
+import { useIsFocused } from "@react-navigation/native";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -53,33 +54,23 @@ export default function AgendaScreen({ navigation, route }) {
 
   const testIDs = require("../testIDs");
   const checks = useSelector((state) => state.checksReducer.checks);
-
   const [items, setItems] = useState({});
   const [currentDate, setCurrentDate] = useState("");
   const [title, setTitle] = useState("");
 
+  const isFocused = useIsFocused("calendars");
+
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      setTimeout(() => {
-        dispatch(checkListShow());
-        loadItems();
-      }, 2000);
-    });
+    console.log("캘린더 호출1");
+    loadItems();
+  }, []);
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
-  }, [navigation]);
+  useEffect(() => {
+    console.log("캘린더 호출2");
+    dispatch(checkListShow());
+  }, [isFocused]);
 
-  // useEffect(() => {
-  //   console.log("너 몇번?");
-  //   setItems({});
-  //   setTimeout(() => {
-  //     dispatch(checkListShow());
-  //     loadItems();
-  //   }, 1000);
-  // }, [TEMP]);
-
-  function loadItems(day) {
+  function loadItems() {
     for (const check of checks) {
       const _date = String(check.date);
       const newDate =
