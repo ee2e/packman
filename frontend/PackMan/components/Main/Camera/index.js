@@ -164,14 +164,3 @@ export default function TakePhoto({ navigation }) {
     </View>
   );
 }
-
-const CameraStack = createStackNavigator();
-
-export default function CameraStackScreen() {
-  return (
-    <CameraStack.Navigator headerMode="none">
-      <CameraStack.Screen name="camera" component={TakePhoto} />
-      <CameraStack.Screen name="checkstuff" component={CheckStuff} />
-    </CameraStack.Navigator>
-  );
-}
