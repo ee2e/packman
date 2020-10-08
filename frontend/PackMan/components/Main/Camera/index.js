@@ -50,7 +50,7 @@ export default function TakePhoto({ navigation, route }) {
       navigation.navigate("checkStuff", {
         suppliesId: route.params.suppliesId,
         stuffs: data.stuff_list,
-        imageUrl: data.image_url,
+        imageUrl: data.new_url,
       });
     } catch (error) {
       console.log(error);

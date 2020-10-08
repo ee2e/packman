@@ -26,7 +26,6 @@ const screenHeight = Dimensions.get("screen").height;
 
 export default function CheckList({ navigation, route }) {
   console.log("------------------------------------------------------------");
-  console.log(route.params.date);
   const paramsDate =
     route.params.date.substr(0, 4) +
     "년 " +
@@ -157,133 +156,137 @@ export default function CheckList({ navigation, route }) {
               onPress={writeCheckList}
             />
           </View>
-
-          {/* 일정 입력 */}
-          <TextInput
-            style={styles.input_content}
-            value={content}
-            onChangeText={(content) => setContent(content)}
-            placeholder="일정을 입력하세요."
-            multiline={true}
-            onEndmitEditing={Keyboard.dismiss}
-          />
-
-          {/* 날짜 선택 */}
-          <TouchableOpacity style={styles.date_button} onPress={showDatePicker}>
-            <Text style={styles.date_text}> {chosenDate} </Text>
-          </TouchableOpacity>
-          <DateTimePicker
-            isVisible={isVisible}
-            onConfirm={handleDatePicker}
-            onCancel={hideDatePicker}
-            cancelTextIOS="취소"
-            confirmTextIOS="확인"
-            headerTextIOS="여행 날짜"
-            locale="ko-KR"
-          />
-
-          {/* 장소 선택 */}
-          <View style={styles.view_place}>
-            <EvilIcons
-              style={styles.icon_place}
-              name="location"
-              size={40}
-              color="#03bcdb"
-            />
-            <GooglePlacesAutocomplete
-              query={{
-                key: GOOGLE_PLACES_API_KEY,
-                language: "ko",
-              }}
-              onPress={(data, details = null) => setPlace(data.description)}
-              onFail={(error) => console.error(error)}
-              requestUrl={{
-                url:
-                  "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
-                useOnPlatform: "web",
-              }}
-              placeholder="장소"
-              styles={{
-                container: {
-                  marginTop: 15,
-                  marginRight: 20,
-                },
-                textInputContainer: {
-                  backgroundColor: "#f2f2f2",
-                  borderBottomWidth: 0,
-                  borderTopWidth: 0,
-                },
-                textInput: {
-                  marginLeft: 14,
-                  marginRight: 0,
-                  backgroundColor: "#f2f2f2",
-                  fontFamily: "BMHANNA",
-                  fontSize: 18,
-                },
-              }}
-            />
-          </View>
-
-          {/* 준비물 입력 */}
-          <View style={styles.view_place}>
-            <EvilIcons
-              style={styles.icon_place}
-              name="archive"
-              size={40}
-              color="#03bcdb"
-            />
-            <View
-              style={{
-                borderBottomColor: "#BDBDBD",
-                borderBottomWidth: 1,
-                marginTop: 20,
-              }}
+          <ScrollView>
+            {/* 일정 입력 */}
+            <TextInput
+              style={styles.input_content}
+              value={content}
+              onChangeText={(content) => setContent(content)}
+              placeholder="일정을 입력하세요."
+              multiline={true}
+              onEndmitEditing={Keyboard.dismiss}
             />
 
-            <View style={styles.container_list}>
-              {stuffs.map((supply, i) => (
-                <ListItem
-                  key={i}
-                  bottomDivider
+            {/* 날짜 선택 */}
+            <TouchableOpacity
+              style={styles.date_button}
+              onPress={showDatePicker}
+            >
+              <Text style={styles.date_text}> {chosenDate} </Text>
+            </TouchableOpacity>
+            <DateTimePicker
+              isVisible={isVisible}
+              onConfirm={handleDatePicker}
+              onCancel={hideDatePicker}
+              cancelTextIOS="취소"
+              confirmTextIOS="확인"
+              headerTextIOS="여행 날짜"
+              locale="ko-KR"
+            />
+
+            {/* 장소 선택 */}
+            <View style={styles.view_place}>
+              <EvilIcons
+                style={styles.icon_place}
+                name="location"
+                size={40}
+                color="#03bcdb"
+              />
+              <GooglePlacesAutocomplete
+                query={{
+                  key: GOOGLE_PLACES_API_KEY,
+                  language: "ko",
+                }}
+                onPress={(data, details = null) => setPlace(data.description)}
+                onFail={(error) => console.error(error)}
+                requestUrl={{
+                  url:
+                    "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
+                  useOnPlatform: "web",
+                }}
+                placeholder="장소"
+                styles={{
+                  container: {
+                    marginTop: 15,
+                    marginRight: 20,
+                  },
+                  textInputContainer: {
+                    backgroundColor: "#f2f2f2",
+                    borderBottomWidth: 0,
+                    borderTopWidth: 0,
+                  },
+                  textInput: {
+                    marginLeft: 14,
+                    marginRight: 0,
+                    backgroundColor: "#f2f2f2",
+                    fontFamily: "BMHANNA",
+                    fontSize: 18,
+                  },
+                }}
+              />
+            </View>
+
+            {/* 준비물 입력 */}
+            <View style={styles.view_place}>
+              <EvilIcons
+                style={styles.icon_place}
+                name="archive"
+                size={40}
+                color="#03bcdb"
+              />
+              <View
+                style={{
+                  borderBottomColor: "#BDBDBD",
+                  borderBottomWidth: 1,
+                  marginTop: 20,
+                }}
+              />
+
+              <View style={styles.container_list}>
+                {stuffs.map((supply, i) => (
+                  <ListItem
+                    key={i}
+                    bottomDivider
+                    containerStyle={{
+                      width: 280,
+                      height: 47,
+                      backgroundColor: "#f2f2f2",
+                      fontFamily: "BMHANNA",
+                    }}
+                  >
+                    <ListItem.Content>
+                      <ListItem.Title style={styles.input_list}>
+                        {supply.name}
+                      </ListItem.Title>
+                    </ListItem.Content>
+                    <TouchableOpacity onPress={() => supplyRemove(supply.name)}>
+                      <ListItem.Chevron name="close" type="evilicon" />
+                    </TouchableOpacity>
+                  </ListItem>
+                ))}
+                <Input
                   containerStyle={{
                     width: 280,
                     height: 47,
                     backgroundColor: "#f2f2f2",
-                    fontFamily: "BMHANNA",
+                    marginLeft: 0,
                   }}
-                >
-                  <ListItem.Content>
-                    <ListItem.Title style={styles.input_list}>
-                      {supply.name}
-                    </ListItem.Title>
-                  </ListItem.Content>
-                  <TouchableOpacity onPress={() => supplyRemove(supply.name)}>
-                    <ListItem.Chevron name="close" type="evilicon" />
-                  </TouchableOpacity>
-                </ListItem>
-              ))}
-              <Input
-                containerStyle={{
-                  width: 280,
-                  height: 47,
-                  backgroundColor: "#f2f2f2",
-                  marginLeft: 0,
-                }}
-                style={styles.input_stuff}
-                placeholder="준비물을 입력하세요."
-                value={supply}
-                onChangeText={(value) => setSupply(value)}
-                rightIcon={
-                  <Octicons
-                    name="plus"
-                    size={24}
-                    color="black"
-                    onPress={(value) => addStuff(value)}
-                  />
-                }
-              />
+                  style={styles.input_stuff}
+                  placeholder="준비물을 입력하세요."
+                  value={supply}
+                  onChangeText={(value) => setSupply(value)}
+                  rightIcon={
+                    <Octicons
+                      name="plus"
+                      size={24}
+                      color="black"
+                      onPress={(value) => addStuff(value)}
+                    />
+                  }
+                />
+              </View>
             </View>
-          </View>
+          </ScrollView>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
