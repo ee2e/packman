@@ -1,11 +1,17 @@
-import React, { Component } from "react";
-import { Alert, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Alert, StyleSheet, View, TouchableOpacity } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { Agenda, LocaleConfig } from "react-native-calendars";
-import { Icon } from "react-native-elements";
+import { Icon, Text, CheckBox } from "react-native-elements";
+import { useDispatch, useSelector } from "react-redux";
+import { checkListShow } from "../../../redux/checksSlice";
+import { FontAwesome } from "@expo/vector-icons";
 
-const testIDs = require("../testIDs");
+import Camera from "../Camera";
+import CheckList from "../CheckList";
+import CheckStuff from "../CheckStuff";
 
-LocaleConfig.locales["fr"] = {
+LocaleConfig.locales["ko"] = {
   monthNames: [
     "1월",
     "2월",
@@ -46,62 +52,101 @@ LocaleConfig.locales["fr"] = {
   dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
   today: "오늘",
 };
-LocaleConfig.defaultLocale = "fr";
+LocaleConfig.defaultLocale = "ko";
 
-export default class AgendaScreen extends Component {
-  constructor(props) {
-    super(props);
+function Calendars({ navigation, route }) {
+  const dispatch = useDispatch();
 
-    this.state = {
-      items: {},
-      date: "",
-    };
-  }
+  const testIDs = require("../testIDs");
+  const checks = useSelector((state) => state.checksReducer.checks);
 
-  componentDidMount() {
+  const [items, setItems] = useState({});
+  const [currentDate, setCurrentDate] = useState();
+  const [title, setTitle] = useState("");
+
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", () => {
+  //     const year = new Date().getFullYear();
+  //     const month = new Date().getMonth() + 1;
+  //     const temp_day = new Date().getDate();
+
+  //     if (String(temp_day).length === 2) {
+  //       day = temp_day;
+  //     } else {
+  //       day = "0" + temp_day;
+  //     }
+
+  //     setTitle(year + "년 " + month + "월");
+  //     setCurrentDate(year + "-" + month + "-" + String(day));
+
+  //     console.log("캘린더로 돌아왔음");
+  //   });
+  //   return unsubscribe;
+  // }, []);
+
+  useEffect(() => {
     const year = new Date().getFullYear();
     const month = new Date().getMonth() + 1;
-    const day = new Date().getDate();
+    const temp_day = new Date().getDate();
 
-    this.setState({
-      date: year + "-" + month + "-" + day,
-    });
-  }
+    if (String(temp_day).length === 2) {
+      day = temp_day;
+    } else {
+      day = "0" + temp_day;
+    }
 
-  loadItems(day) {
-    setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        var _date = new Date(time);
-        const strTime = this.timeToString(time);
-        if (!this.state.items[strTime]) {
-          this.state.items[strTime] = [];
-          const numItems = Math.floor(Math.random() * 3 + 1);
-          for (let j = 0; j < numItems; j++) {
-            this.state.items[strTime].push({
-              name: "Item for " + strTime + " #" + j,
-              date: _date.getFullYear() + "년 " + `${_date.getMonth()+1}월 ` + _date.getDate() + "일",
-              height: Math.max(50, Math.floor(Math.random() * 150)),
-            });
-          }
-        }
+    setTitle(year + "년 " + month + "월");
+    setCurrentDate(year + "-" + month + "-" + String(day));
+
+    console.log("캘린더로 돌아왔음");
+    dispatch(checkListShow());
+  }, []);
+
+  useEffect(() => {
+    console.log("난 체크가 바뀔때마다 실행되지롱~");
+    loadItems();
+  }, [checks]);
+
+  function loadItems(day) {
+    const tempItems = {};
+    for (const check of checks) {
+      const _date = String(check.date);
+      const newDate =
+        _date.substr(0, 4) +
+        "-" +
+        _date.substr(4, 2) +
+        "-" +
+        _date.substr(6, 2);
+      const newDate2 =
+        _date.substr(0, 4) +
+        "년 " +
+        _date.substr(4, 2) +
+        "월 " +
+        _date.substr(6, 2) +
+        "일";
+      if (!tempItems[newDate]) {
+        tempItems[newDate] = [];
       }
-      const newItems = {};
-      Object.keys(this.state.items).forEach((key) => {
-        newItems[key] = this.state.items[key];
+      tempItems[newDate].push({
+        id: check.id,
+        name: check.content,
+        date: newDate2,
+        stuffs: check.stuffs,
       });
-      this.setState({
-        items: newItems,
-      });
-    }, 1000);
+    }
+    const newItems = {};
+    Object.keys(tempItems).forEach((key) => {
+      newItems[key] = tempItems[key];
+    });
+    setItems(newItems);
+    console.log("체크리스트 다 로드했음~");
   }
 
-  renderItem(item) {
-    const { navigation } = this.props;
+  const renderItem = (item) => {
     return (
       <TouchableOpacity
         testID={testIDs.agenda.ITEM}
-        style={[styles.item, { height: item.height }]}
+        style={styles.item}
         onPress={() =>
           Alert.alert(
             `${item.date}`,
@@ -111,80 +156,122 @@ export default class AgendaScreen extends Component {
                 text: "취소",
                 style: "cancel",
               },
-              { text: "확인", onPress: () => navigation.navigate("camera") },
+              {
+                text: "확인",
+                onPress: () =>
+                  navigation.navigate("camera", {
+                    suppliesId: item.id,
+                  }),
+              },
             ],
             { cancelable: true }
           )
         }
       >
-        <Text>{item.name}</Text>
+        <Text
+          h4
+          style={{ textAlign: "center", marginTop: 10, marginBottom: 15 }}
+        >
+          {item.name}
+        </Text>
+        {item.stuffs.map((stuff) => (
+          <View key={stuff.id}>
+            <CheckBox title={stuff.name} checked={stuff.check} />
+          </View>
+        ))}
       </TouchableOpacity>
     );
-  }
+  };
 
-  renderEmptyData() {
+  const renderEmptyData = () => {
     return (
       <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
+        <Text style={{ fontFamily: "BMHANNA", fontSize: 20 }}>
+          준비물을 한 번 챙겨볼까요?
+        </Text>
+        <View style={{ display: "absolute", bottom: -223, left: 18 }}>
+          <View>
+            <Text
+              style={{
+                fontFamily: "BMHANNA",
+                fontSize: 20,
+              }}
+            >
+              클릭해서 등록 !&nbsp;&nbsp;
+              <FontAwesome name="hand-o-right" size={24} color="black" />
+            </Text>
+          </View>
+        </View>
       </View>
     );
-  }
+  };
 
-  rowHasChanged(r1, r2) {
+  const rowHasChanged = (r1, r2) => {
     return r1.name !== r2.name;
-  }
+  };
 
-  timeToString(time) {
+  const timeToString = (time) => {
     const date = new Date(time);
     return date.toISOString().split("T")[0];
-  }
+  };
 
-  render() {
-    const { date } = this.state;
-
-    return (
-      <>
-        <Agenda
-          style={styles.agendaContainer}
-          testID={testIDs.agenda.CONTAINER}
-          items={this.state.items}
-          loadItemsForMonth={this.loadItems.bind(this)}
-          selected={date}
-          onDayPress={(day) => console.log(day)}
-          renderItem={this.renderItem.bind(this)}
-          renderEmptyData={this.renderEmptyData.bind(this)}
-          rowHasChanged={this.rowHasChanged.bind(this)}
-          // markingType={'period'}
-          // markedDates={{
-          //    '2017-05-08': {textColor: '#43515c'},
-          //    '2017-05-09': {textColor: '#43515c'},
-          //    '2017-05-14': {startingDay: true, endingDay: true, color: 'blue'},
-          //    '2017-05-21': {startingDay: true, color: 'blue'},
-          //    '2017-05-22': {endingDay: true, color: 'gray'},
-          //    '2017-05-24': {startingDay: true, color: 'gray'},
-          //    '2017-05-25': {color: 'gray'},
-          //    '2017-05-26': {endingDay: true, color: 'gray'}}}
-          // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
-          //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
-          // hideExtraDays={false}
-        />
-        <Icon
-          reverse
-          name="plus"
-          type="font-awesome"
-          color="#03bcdb"
-          containerStyle={styles.btnContainer}
-          onPress={() => alert("click")}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <View style={{ backgroundColor: "white" }}>
+        <View style={styles.date}>
+          <Text style={styles.dateText}>{title}</Text>
+        </View>
+      </View>
+      <Agenda
+        style={styles.agendaContainer}
+        testID={testIDs.agenda.CONTAINER}
+        items={items}
+        // loadItemsForMonth={loadItems}
+        onDayPress={(day) => {
+          setCurrentDate(day.dateString);
+          setTitle(day.year + "년 " + day.month + "월");
+        }}
+        renderItem={renderItem}
+        renderEmptyData={renderEmptyData}
+        rowHasChanged={rowHasChanged}
+        // markingType={'period'}
+        // markedDates={{
+        //    '2017-05-08': {textColor: '#43515c'},
+        //    '2017-05-09': {textColor: '#43515c'},
+        //    '2017-05-14': {startingDay: true, endingDay: true, color: 'blue'},
+        //    '2017-05-21': {startingDay: true, color: 'blue'},
+        //    '2017-05-22': {endingDay: true, color: 'gray'},
+        //    '2017-05-24': {startingDay: true, color: 'gray'},
+        //    '2017-05-25': {color: 'gray'},
+        //    '2017-05-26': {endingDay: true, color: 'gray'}}}
+        // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
+        //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
+        // hideExtraDays={false}
+      ></Agenda>
+      <Icon
+        reverse
+        name="plus"
+        type="font-awesome"
+        color="#03bcdb"
+        containerStyle={styles.btnContainer}
+        onPress={() => navigation.navigate("checkList", { date: currentDate })}
+      />
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
-  agendaContainer: {
+  date: {
     marginTop: 40,
+    justifyContent: "center",
+    alignItems: "center",
   },
+  dateText: {
+    fontFamily: "BMHANNA",
+    fontSize: 25,
+    marginTop: 12,
+  },
+  agendaContainer: {},
   item: {
     backgroundColor: "white",
     flex: 1,
@@ -205,3 +292,16 @@ const styles = StyleSheet.create({
     right: 15,
   },
 });
+
+const CalendarsStack = createStackNavigator();
+
+export default function CalendarsStackScreen() {
+  return (
+    <CalendarsStack.Navigator headerMode="none">
+      <CalendarsStack.Screen name="calendars" component={Calendars} />
+      <CalendarsStack.Screen name="checkList" component={CheckList} />
+      <CalendarsStack.Screen name="camera" component={Camera} />
+      <CalendarsStack.Screen name="checkStuff" component={CheckStuff} />
+    </CalendarsStack.Navigator>
+  );
+}

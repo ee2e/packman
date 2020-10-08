@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Button } from "react-native";
+import { Alert, View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { Camera } from "expo-camera";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import { EvilIcons } from "@expo/vector-icons";
+import api from "../../../api";
+
+const screenWidth = Dimensions.get("screen").width;
+const screenHeight = Dimensions.get("screen").height;
 
 var albumBucketName = "pack-man";
 var bucketRegion = "ap-northeast-2";
@@ -20,10 +24,9 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-export default function TakePhoto({ navigation }) {
+export default function TakePhoto({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
-
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
@@ -36,6 +39,22 @@ export default function TakePhoto({ navigation }) {
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
+  }
+
+  async function sendImage(imageUrl) {
+    console.log("imgUrl : " + imageUrl);
+    try {
+      const { data } = await api.detect({
+        url: imageUrl,
+      });
+      navigation.navigate("checkStuff", {
+        suppliesId: route.params.suppliesId,
+        stuffs: data.stuff_list,
+        imageUrl: data.image_url,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -58,15 +77,14 @@ export default function TakePhoto({ navigation }) {
           style={{
             flex: 1,
             flexDirection: "row",
-            backgroundColor: "white",
-            marginTop: 480,
+            backgroundColor: "transparent",
           }}
         >
           <TouchableOpacity
             style={{
               flex: 1,
               alignItems: "center",
-              marginTop: 55,
+              marginTop: screenHeight - 300,
             }}
             onPress={async () => {
               if (cameraRef) {
@@ -92,16 +110,28 @@ export default function TakePhoto({ navigation }) {
                   ACL: "public-read",
                 };
 
+                const temp = api.AWS_S3_SERVER + params.Key;
+                console.log("upload url : " + temp);
+
                 // 업로드
-                s3.upload(params, function (err, data) {
+                s3.upload(params, function (err) {
                   if (err) {
-                    console.log(err);
                     return alert("There was an error uploading your photo");
                   }
-                  alert("Successfully uploaded photo.");
-                });
 
-                console.log(params);
+                  Alert.alert(
+                    "사진 업로드 완료",
+                    "조금만 기다려주세요^ㅇ^",
+                    [
+                      {
+                        text: "확인",
+                      },
+                    ],
+                    { cancelable: true }
+                  );
+                  console.log("일");
+                  sendImage(temp);
+                });
               }
             }}
           >
