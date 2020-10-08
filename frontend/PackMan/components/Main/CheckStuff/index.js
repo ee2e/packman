@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableHighlight,
   View,
+  ScrollView,
   Image,
 } from "react-native";
 import { Icon, Text, CheckBox } from "react-native-elements";
@@ -27,10 +28,13 @@ export default function CheckStuff({ navigation, route }) {
   }, []);
 
   const checkStuff = () => {
-    dispatch(
-      sendCheckStuff({ suppliesId: route.params.suppliesId, stuffs: stuffs })
-    );
-    navigation.navigate("calendars");
+    setTimeout(() => {
+      dispatch(
+        sendCheckStuff({ suppliesId: route.params.suppliesId, stuffs: stuffs })
+      );
+      console.log("체크스터프에서 캘린더로 갈거얌~");
+      navigation.navigate("calendars");
+    }, 1000);
   };
 
   const clickCheckBox = (name) => {
@@ -67,19 +71,18 @@ export default function CheckStuff({ navigation, route }) {
           onPress={checkStuff}
         />
       </View>
-      <Image
-        style={styles.aiImage}
-        source={require("../../../assets/202010804522.png")}
-      />
-      {stuffs.map((stuff, id) => (
-        <View key={id}>
-          <CheckBox
-            title={stuff.name}
-            checked={stuff.check}
-            onPress={() => clickCheckBox(stuff.name)}
-          />
-        </View>
-      ))}
+      <ScrollView>
+        <Image style={styles.aiImage} source={{ uri: route.params.imageUrl }} />
+        {stuffs.map((stuff, id) => (
+          <View key={id}>
+            <CheckBox
+              title={stuff.name}
+              checked={stuff.check}
+              onPress={() => clickCheckBox(stuff.name)}
+            />
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -99,9 +102,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   aiImage: {
-    marginLeft: 100,
-    width: 170,
-    height: 300,
+    marginLeft: 65,
+    height: 420,
+    width: 240,
     marginBottom: 10,
   },
 });
