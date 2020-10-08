@@ -56,7 +56,8 @@ def detect(request):
 
     fileurl = "../backend/static/" + filename
     
-    newFileName = 'new' + filename
+    new_fileurl = 'https://pack-man.s3.ap-northeast-2.amazonaws.com/new' + filename
+    new_filename = 'new' + filename
 
     # S3 Client 생성
     s3 = boto3.client('s3')
@@ -67,20 +68,18 @@ def detect(request):
     # 첫본째 매개변수 : 로컬에서 올릴 파일이름
     # 두번째 매개변수 : S3 버킷 이름
     # 세번째 매개변수 : 버킷에 저장될 파일 이름.
-    s3.upload_file(fileurl, bucket_name, newFileName, ExtraArgs={'ACL':'public-read'})
-
-    image_url = 'https://pack-man.s3.ap-northeast-2.amazonaws.com/new' + filename
+    s3.upload_file(fileurl, bucket_name, new_filename, ExtraArgs={'ACL':'public-read'})
 
     # os.system("curl " + url + " > ../AI/yolov5/inference/images/a.jpg")
 
     dicurlname = fileurl + '.json'
-    try: 
+    try:
         dicurl = open(dicurlname)
         data = json.load(dicurl)
-        # print(type(data))
-        # print(data)
-        # print(data['labels'])
-        # print(data['labels'][0])
+        print(type(data))
+        print(data)
+        print(data['labels'])
+        print(data['labels'][0])
 
         final_list = []
         input_list = [
@@ -111,22 +110,21 @@ def detect(request):
                 for i in range(len(input_list)):
                     if label == input_list[i]:
                         final_list.append(outlist_list[i])
-                        break
     except:
-        final_list = ['아무것도 없음']
-    print(final_list)
+        final_list = ["아무것도 없어용"]
+    # print(final_list)
 
-# "socks", 양말
-# "ballcap", 모자
-# "hoody", 후드
-# "pants", 바지
-# "hair dryer", 드라이기
-# "mask", 마스크
-# "charger", 충전기
-# "backpack", 가방
-# "T-shirt", 티셔츠
-    print(image_url)
-    return Response(data={"stuff_list": final_list, "image_url": image_url})
+    # "socks", 양말
+    # "ballcap", 모자
+    # "hoody", 후드
+    # "pants", 바지
+    # "hair dryer", 드라이기
+    # "mask", 마스크
+    # "charger", 충전기
+    # "backpack", 가방
+    # "T-shirt", 티셔츠
+
+    return Response(data={"stuff_list": final_list, "new_url" : new_fileurl})
 
     # encoded_jwt = jwt.encode(
     #     {"pk": user.pk}, settings.SECRET_KEY, algorithm="HS256"

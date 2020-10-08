@@ -100,6 +100,7 @@ export const checkListShow = () => async (dispatch, getState) => {
   try {
     const { data } = await api.myChecklist(id, token);
     dispatch(setCheckLists(data));
+    console.log("체크리스트 보여줘!");
   } catch (e) {
     console.warn(e);
   }
@@ -112,6 +113,7 @@ export const sendCheckStuff = (form) => async (dispatch, getState) => {
   try {
     const { data } = await api.checkStuff(id, token, form);
     dispatch(setCheckLists(data));
+    console.log("체크스터프 데이터 저장했다~~");
   } catch (e) {
     console.warn(e);
   }

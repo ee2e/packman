@@ -103,11 +103,14 @@ class CheckViewSet(ModelViewSet):
                 temp_stuff = Stuff.objects.get(name=stuff['name'])
                 temp_stuff.check = stuff['check']
                 temp_stuff.save()
+                if temp_stuff not in supplies.stuffs.all():
+                    supplies.stuffs.add(temp_stuff)
             else:
                 temp_stuff = Stuff.objects.create(name=stuff['name'])
-                supplies.stuffs.add(temp_stuff)
                 temp_stuff.check = stuff['check']
                 temp_stuff.save()
+                supplies.stuffs.add(temp_stuff)
+        supplies.save()
         
         total_supplies = Supplies.objects.filter(owner=user)
         serializer = SuppliesSerializer(total_supplies, many=True)
